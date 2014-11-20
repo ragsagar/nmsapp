@@ -25,7 +25,7 @@ class MeterTable(tables.Table):
     class Meta:
         model = Meter
         fields = ('id', 'stationaddress', 'modbusaddress')
-        attrs = {'class': "table table-condensed",
+        attrs = {'class': "table table-condensed rowlink",
                  'data-link': 'row'}
 
 
