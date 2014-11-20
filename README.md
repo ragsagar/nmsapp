@@ -6,7 +6,10 @@
   to compileall before generating the package.
 
 ###Building Packag###
-* Make sure the pyc files exists.
+* Generate latest pyc files.
+
+    python generate_pyc.py
+
 * Update the version in setup.py file.
 * Build the package using following command.
     
