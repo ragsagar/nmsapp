@@ -4,9 +4,9 @@ from django.views.generic import DetailView
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin
 
-from .models import Station, Meter, Daily, Hourly, Reading
+from .models import Station, Meter, Daily, Hourly, Reading, Log
 from .tables import (StationTable, MeterTable, DailyTable,
-                     HourlyTable, IntervalTable)
+                     HourlyTable, IntervalTable, LogTable)
 
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -56,3 +56,11 @@ class MeterDetailView(LoginRequiredMixin, DetailView):
                         'hourly_table': hourly_table,
                         'interval_table': interval_table})
         return context
+
+
+class LogListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all logs. """
+    model = Log
+    template_name = "nms/log_list.html"
+    table_class = LogTable
+

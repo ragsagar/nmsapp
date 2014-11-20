@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
-from .views import StationListView, MeterListView, MeterDetailView
+from .views import (StationListView, MeterListView, MeterDetailView,
+        LogListView)
 
 
 urlpatterns = patterns('',
@@ -10,6 +11,8 @@ urlpatterns = patterns('',
             MeterListView.as_view(), name='station_meters_list'),
         url(r'^meter/(?P<pk>\d+)/$',
             MeterDetailView.as_view(), name='meter_detail'),
+        url(r'^logs/$',
+            LogListView.as_view(), name='list_log'),
         url(r'^accounts/login/$',
             'django.contrib.auth.views.login', name='login'),
         url(r'^accounts/logout/$',
