@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-condensed">
+      <tbody>
+	<tr><td>ModBus Address</td><td>{{ meter.modbusaddress }}</td></tr>
+	<tr><td>Tag</td><td>{{ meter.meter_info.tag }}</td></tr>
+	<tr><td>Service</td><td>{{ meter.meter_info.service }}</td></tr>
+	<tr><td>Pipeline</td><td>{{ meter.meter_info.pipeline }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="title">Intervals</div>
+      </div>
+      <div class="panel-body">
+	    {% render_table interval_table %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="title">Hourly</div>
+      </div>
+      <div class="panel-body">
+	    {% render_table hourly_table %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="title">Daily</div>
+      </div>
+      <div class="panel-body">
+	    {% render_table daily_table %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
