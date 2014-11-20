@@ -29,7 +29,7 @@ class MeterListView(LoginRequiredMixin, SingleTableView):
         queryset = super(MeterListView, self).get_queryset()
         pk = self.kwargs.get('pk')
         station = get_object_or_404(Station, pk=pk)
-        queryset.filter(stationaddress=station)
+        queryset = queryset.filter(stationaddress=station)
         return queryset
 
 
