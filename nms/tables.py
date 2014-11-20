@@ -1,6 +1,6 @@
 import django_tables2 as tables
 
-from .models import Station, Meter, Hourly, Daily, Reading
+from .models import Station, Meter, Hourly, Daily, Reading, Log
 
 
 class StationTable(tables.Table):
@@ -15,7 +15,7 @@ class StationTable(tables.Table):
 
 
 class MeterTable(tables.Table):
-    modebusaddress = tables.LinkColumn('meter_detail',
+    modbusaddress = tables.LinkColumn('meter_detail',
                                        args=[tables.utils.A('pk')],
                                        )
     tag = tables.Column(accessor='meter_info.tag')
@@ -58,3 +58,7 @@ class DailyTable(tables.Table):
                    'realdate', 'realtime')
 
 
+class LogTable(tables.Table):
+    class Meta:
+        model = Log
+        attrs = {'class': 'table table-condensed'}
