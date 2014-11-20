@@ -1,11 +1,11 @@
-###NMSAPP Django app###
+###NMSAPP###
 
 * nmsapp is a django app that works with the nmsweb django project.
 * Build the package and pip install the package to use it.
 * This will build the package with pyc files excluding py files. So make sure
   to compileall before generating the package.
 
-###Building Packag###
+###Building Package###
 * Generate latest pyc files.
 
     python generate_pyc.py
