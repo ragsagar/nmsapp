@@ -1,0 +1,6 @@
+recursive-include nms *.pyc
+recursive-include nms/static *
+recursive-include nms/templates *
+
+global-exclude .git
+recursive-exclude nms *.py
