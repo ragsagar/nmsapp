@@ -8,14 +8,31 @@
 ###Building Package###
 * Generate latest pyc files.
 
-    python generate_pyc.py
+  
+```
+#!python
+
+  python generate_pyc.py
+```
+
 
 * Update the version in setup.py file.
 * Build the package using following command.
     
-    python setup.py sdist
+    
+```
+#!python
+
+python setup.py sdist
+
+```
 
 * New package will be generated in the build/ directory.
 * Install the package using the following command.
 
-    pip install build/nmsapp-<version>.tar.gz
+   
+```
+#!python
+
+ pip install build/nmsapp-<version>.tar.gz
+```
