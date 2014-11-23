@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from .views import (StationListView, MeterListView, MeterDetailView,
         LogListView, MeterInfoListView, ModeListView, CreateModeView,
         CreateMeterInfoView, CreateStationView, MeterInfoDetailView,
-        CreateMeterView, UpdateMeterInfoView)
+        CreateMeterView, UpdateMeterInfoView, ModeDetailView, UpdateModeView)
 
 
 urlpatterns = patterns('',
@@ -29,6 +29,10 @@ urlpatterns = patterns('',
             UpdateMeterInfoView.as_view(), name='update_meter_info'),
         url(r'^modes/$',
             ModeListView.as_view(), name='list_modes'),
+        url(r'^mode/(?P<pk>\w+)/$',
+            ModeDetailView.as_view(), name='mode_detail'),
+        url(r'^mode/(?P<pk>\w+)/update/$',
+            UpdateModeView.as_view(), name='update_mode'),
         url(r'^modes/create/$',
             CreateModeView.as_view(), name='create_mode'),
         url(r'^accounts/login/$',

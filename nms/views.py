@@ -134,3 +134,18 @@ class UpdateMeterInfoView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('meter_info_detail',
                             kwargs={'pk': self.kwargs.get('pk')})
+
+
+class ModeDetailView(LoginRequiredMixin, DetailView):
+    """ View to show the mode detail page. """
+    model = Mode
+    template_name = 'nms/mode_detail.html'
+
+
+class UpdateModeView(LoginRequiredMixin, UpdateView):
+    """ View to update mode. """
+    model = Mode
+
+    def get_success_url(self):
+        return reverse_lazy('mode_detail',
+                            kwargs={'pk': self.kwargs.get('pk')})
