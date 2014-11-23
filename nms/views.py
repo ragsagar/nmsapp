@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 
 from django_tables2 import SingleTableView, RequestConfig
@@ -125,3 +125,12 @@ class CreateMeterView(LoginRequiredMixin, CreateView):
         self.object.meter_info = meter_info
         self.object.save()
         return redirect(meter_info.get_absolute_url())
+
+
+class UpdateMeterInfoView(LoginRequiredMixin, UpdateView):
+    """ View to update meter info. """
+    model = MeterInfo
+
+    def get_success_url(self):
+        return reverse_lazy('meter_info_detail',
+                            kwargs={'pk': self.kwargs.get('pk')})
