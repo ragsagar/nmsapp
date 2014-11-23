@@ -93,3 +93,9 @@ class CreateMeterInfoView(LoginRequiredMixin, CreateView):
     """ View to create new meter info. """
     model = MeterInfo
     success_url = reverse_lazy('list_meter_infos')
+
+
+class CreateStationView(LoginRequiredMixin, CreateView):
+    """ View to create new station. """
+    model = Station
+    success_url = reverse_lazy('list_stations')
