@@ -34,7 +34,7 @@ class IntervalTable(tables.Table):
     class Meta:
         model = Reading
         attrs = {'class': 'table table-condensed'}
-        exclude = ('nmsrealtime', 'stationaddress', 'modbusaddress',
+        exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
                    'field14', 'field15', 'field16', 'created', 'id')
 
@@ -43,7 +43,7 @@ class HourlyTable(tables.Table):
     class Meta:
         model = Hourly
         attrs = {'class': 'table table-condensed'}
-        exclude = ('nmsrealtime', 'stationaddress', 'modbusaddress',
+        exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'id', 'field14', 'field15', 'field16',
                    'created', 'index', 'realdate', 'realtime',
                    'meterrealtime')
@@ -53,7 +53,7 @@ class DailyTable(tables.Table):
     class Meta:
         model = Daily
         attrs = {'class': 'table table-condensed'}
-        exclude = ('nmsrealtime', 'stationaddress', 'modbusaddress',
+        exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
                    'field14', 'field15', 'field16', 'created', 'id',
                    'realdate', 'realtime')
