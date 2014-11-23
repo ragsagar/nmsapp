@@ -1,6 +1,7 @@
 import django_tables2 as tables
 
-from .models import Station, Meter, Hourly, Daily, Reading, Log
+from .models import (Station, Meter, Hourly, Daily, Reading, Log,
+        Mode, MeterInfo)
 
 
 class StationTable(tables.Table):
@@ -61,4 +62,18 @@ class DailyTable(tables.Table):
 class LogTable(tables.Table):
     class Meta:
         model = Log
+        attrs = {'class': 'table table-condensed'}
+
+
+class ModeTable(tables.Table):
+    class Meta:
+        model = Mode
+        attrs = {'class': 'table table-condensed'}
+        fields = ('modename', 'serialport', 'ticksperpacket',
+                  'packetsperbroadcast', 'minbatt', 'maxtemp')
+
+
+class MeterInfoTable(tables.Table):
+    class Meta:
+        model = MeterInfo
         attrs = {'class': 'table table-condensed'}
