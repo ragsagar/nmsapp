@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.urlresolvers import reverse_lazy
+from django.utils.functional import cached_property
 
 
 class Station(models.Model):
@@ -29,6 +31,19 @@ class MeterInfo(models.Model):
     pipeline = models.TextField()
     service = models.TextField()
 
+    @cached_property
+    def related_meter(self):
+        """ Return related meter if it exists. """
+        meters = self.meters.all()
+        if meters:
+            return meters[0]
+        else:
+            return None
+
+    def get_absolute_url(self):
+        return reverse_lazy('meter_info_detail',
+                            kwargs={'pk': self.pk})
+
 
 class Meter(models.Model):
     stationaddress = models.ForeignKey(Station, related_name='meters',
@@ -44,6 +59,13 @@ class Meter(models.Model):
     hourlyrecords  = models.IntegerField(blank=True, null=True)
     dailyrecords  = models.IntegerField(blank=True, null=True)
     meter_info = models.ForeignKey(MeterInfo, related_name='meters')
+
+    def get_absolute_url(self):
+        return reverse_lazy('meter_detail',
+                            kwargs={'pk': self.pk})
+
+    def __unicode__(self):
+        return u"%s %s" % (self.stationaddress, self.modbusaddress)
 
     class Meta:
         unique_together = ('stationaddress', 'modbusaddress')
