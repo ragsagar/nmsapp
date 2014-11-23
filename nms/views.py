@@ -4,9 +4,11 @@ from django.views.generic import DetailView
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin
 
-from .models import Station, Meter, Daily, Hourly, Reading, Log
+from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
+                     MeterInfo)
 from .tables import (StationTable, MeterTable, DailyTable,
-                     HourlyTable, IntervalTable, LogTable)
+                     HourlyTable, IntervalTable, LogTable, ModeTable,
+                     MeterInfoTable)
 
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -64,3 +66,17 @@ class LogListView(LoginRequiredMixin, SingleTableView):
     template_name = "nms/log_list.html"
     table_class = LogTable
 
+
+class ModeListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all Modes. """
+    model = Mode
+    template_name = "nms/mode_list.html"
+    table_class = ModeTable
+
+
+class MeterInfoListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all meter infos. MeterInfo with no
+    associated meters will be listed as disabled. """
+    model = MeterInfo
+    template_name = "nms/meter_info_list.html"
+    table_class = MeterInfoTable
