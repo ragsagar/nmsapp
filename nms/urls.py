@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 
 from .views import (StationListView, MeterListView, MeterDetailView,
-        LogListView, MeterInfoListView, ModeListView, CreateModeView)
+        LogListView, MeterInfoListView, ModeListView, CreateModeView,
+        CreateMeterInfoView)
 
 
 urlpatterns = patterns('',
@@ -15,6 +16,8 @@ urlpatterns = patterns('',
             LogListView.as_view(), name='list_logs'),
         url(r'^meter_infos/$',
             MeterInfoListView.as_view(), name='list_meter_infos'),
+        url(r'^meter_infos/create/$',
+            CreateMeterInfoView.as_view(), name='create_meter_info'),
         url(r'^modes/$',
             ModeListView.as_view(), name='list_modes'),
         url(r'^modes/create/$',
