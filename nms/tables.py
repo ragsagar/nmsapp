@@ -66,11 +66,15 @@ class LogTable(tables.Table):
 
 
 class ModeTable(tables.Table):
+    modename = tables.LinkColumn('mode_detail',
+                                 args=[tables.utils.A('pk')],
+                                )
     class Meta:
         model = Mode
-        attrs = {'class': 'table table-condensed'}
         fields = ('modename', 'serialport', 'ticksperpacket',
                   'packetsperbroadcast', 'minbatt', 'maxtemp')
+        attrs = {'class': "table table-condensed rowlink",
+                 'data-link': 'row'}
 
 
 class MeterInfoTable(tables.Table):
