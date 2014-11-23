@@ -44,6 +44,15 @@ class MeterInfo(models.Model):
         return reverse_lazy('meter_info_detail',
                             kwargs={'pk': self.pk})
 
+    @cached_property
+    def related_location(self):
+        """ Return related meter if it exists. """
+        locations = self.meter_locations.all()
+        if locations:
+            return locations[0]
+        else:
+            return None
+
 
 class Meter(models.Model):
     stationaddress = models.ForeignKey(Station, related_name='meters',
@@ -186,7 +195,7 @@ class Log(models.Model):
 
 
 class MeterLocation(models.Model):
-    meter = models.ForeignKey(MeterInfo, related_name='meter_location')
+    meter = models.ForeignKey(MeterInfo, related_name='meter_locations')
     gps_lat = models.FloatField(blank=True, null=True)
     gps_lon = models.FloatField(blank=True, null=True)
 
