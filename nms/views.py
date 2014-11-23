@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, CreateView
 from django.core.urlresolvers import reverse_lazy
 
@@ -83,19 +83,45 @@ class MeterInfoListView(LoginRequiredMixin, SingleTableView):
     table_class = MeterInfoTable
 
 
-class CreateModeView(LoginRequiredMixin, CreateView):
-    """ View to create new modes. """
-    model = Mode
-    success_url = reverse_lazy('list_modes')
-
-
 class CreateMeterInfoView(LoginRequiredMixin, CreateView):
     """ View to create new meter info. """
     model = MeterInfo
     success_url = reverse_lazy('list_meter_infos')
 
 
+class MeterInfoDetailView(LoginRequiredMixin, DetailView):
+    """ View to show detail meter info. """
+    model = MeterInfo
+    context_object_name = 'meter_info'
+    template_name = 'nms/meter_info_detail.html'
+
+
+class CreateModeView(LoginRequiredMixin, CreateView):
+    """ View to create new modes. """
+    model = Mode
+    success_url = reverse_lazy('list_modes')
+
+
 class CreateStationView(LoginRequiredMixin, CreateView):
     """ View to create new station. """
     model = Station
     success_url = reverse_lazy('list_stations')
+
+
+class CreateMeterView(LoginRequiredMixin, CreateView):
+    """ View to create new meter. """
+    model = Meter
+    fields = ('stationaddress', 'modbusaddress', 'latestintervaltime',
+              'latesthourlytime', 'latestdailytime', 'latesthourlyindex',
+              'latestdailyindex', 'historicalhourlyindex',
+              'historicaldailyindex', 'hourlyrecords', 'dailyrecords')
+    
+    def form_valid(self, form):
+        """
+        Assign the related meter info the the created meter.
+        """
+        self.object = form.save(commit=False)
+        meter_info = get_object_or_404(MeterInfo, pk=self.kwargs.get("pk"))
+        self.object.meter_info = meter_info
+        self.object.save()
+        return redirect(meter_info.get_absolute_url())

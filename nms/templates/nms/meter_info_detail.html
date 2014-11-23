@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Meter Info</h4>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+              <tbody>
+                <tr><td>Tag</td><td>{{ meter_info.tag }}</td></tr>
+                <tr><td>Pipeline</td><td>{{ meter_info.pipeline }}</td></tr>
+                <tr><td>Service</td><td>{{ meter_info.service }}</td></tr>
+                <tr>
+                    <td>Meter</td>
+                    {% if meter_info.related_meter %}
+                    <td>
+                        <a href="{{ meter_info.related_meter.get_absolute_url }}"> {{ meter_info.related_meter.modbusaddress }}</a>
+                    </td>
+                    {% else %}
+                    <td>
+            <a href="{% url 'create_meter' pk=meter_info.pk %}">Create Meter</a>
+                    </td>
+                    {% endif %}
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
