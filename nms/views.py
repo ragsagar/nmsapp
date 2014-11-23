@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
+from django.core.urlresolvers import reverse_lazy
 
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin
@@ -80,3 +81,9 @@ class MeterInfoListView(LoginRequiredMixin, SingleTableView):
     model = MeterInfo
     template_name = "nms/meter_info_list.html"
     table_class = MeterInfoTable
+
+
+class CreateModeView(LoginRequiredMixin, CreateView):
+    """ View to create new modes. """
+    model = Mode
+    success_url = reverse_lazy('list_modes')

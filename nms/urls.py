@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from .views import (StationListView, MeterListView, MeterDetailView,
-        LogListView, MeterInfoListView, ModeListView)
+        LogListView, MeterInfoListView, ModeListView, CreateModeView)
 
 
 urlpatterns = patterns('',
@@ -17,6 +17,8 @@ urlpatterns = patterns('',
             MeterInfoListView.as_view(), name='list_meter_infos'),
         url(r'^modes/$',
             ModeListView.as_view(), name='list_modes'),
+        url(r'^modes/create/$',
+            CreateModeView.as_view(), name='create_mode'),
         url(r'^accounts/login/$',
             'django.contrib.auth.views.login', name='login'),
         url(r'^accounts/logout/$',
