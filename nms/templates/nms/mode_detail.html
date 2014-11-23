@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Mode</h4>
+            <a href="{% url 'update_mode' mode.pk %}" class="btn btn-small btn-primary">Edit</a>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+              <tbody>
+                  <tr>
+                      <td>Mode Name</td>
+                      <td>{{ mode.modename }}</td>
+                  </tr>
+                  <tr>
+                      <td>Serial Port</td>
+                      <td>{{ mode.serialport }}</td>
+                  </tr>
+                  <tr>
+                      <td>Ticks Per Packet</td>
+                      <td>{{ mode.ticksperpacket }}</td>
+                  </tr>
+                  <tr>
+                      <td>Packets Per Broadcast</td>
+                      <td>{{ mode.packetsperbroadcast }}</td>
+                  </tr>
+                  <tr>
+                      <td>Station Status Interval</td>
+                      <td>{{ mode.stationstatusinterval }}</td>
+                  </tr>
+                  <tr>
+                      <td>Readings Data Interval</td>
+                      <td>{{ mode.intervaldatainterval }}</td>
+                  </tr>
+                  <tr>
+                      <td>Hourly Data Interval</td>
+                      <td>{{ mode.hourlydatainterval }}</td>
+                  </tr>
+                  <tr>
+                      <td>Daily Data Interval</td>
+                      <td>{{ mode.dailydatainterval }}</td>
+                  </tr>
+                  <tr>
+                      <td>Max Failed Reads</td>
+                      <td>{{ mode.maxfailedreads }}</td>
+                  </tr>
+                  <tr>
+                      <td>Min Batt</td>
+                      <td>{{ mode.minbatt }}</td>
+                  </tr>
+                  <tr>
+                      <td>Max Temp</td>
+                      <td>{{ mode.maxtemp }}</td>
+                  </tr>
+                  <tr>
+                      <td>Min RSSI</td>
+                      <td>{{ mode.minrssi }}</td>
+                  </tr>
+                  <tr>
+                      <td>Max Errors</td>
+                      <td>{{ mode.maxerrors }}</td>
+                  </tr>
+                  <tr>
+                      <td>Max Index Match</td>
+                      <td>{{ mode.maxindexmatch }}</td>
+                  </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
