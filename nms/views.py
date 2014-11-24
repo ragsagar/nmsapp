@@ -81,6 +81,7 @@ class MeterInfoListView(LoginRequiredMixin, SingleTableView):
     model = MeterInfo
     template_name = "nms/meter_info_list.html"
     table_class = MeterInfoTable
+    queryset = MeterInfo.objects.all().prefetch_related('meters')
 
 
 class CreateMeterInfoView(LoginRequiredMixin, CreateView):
