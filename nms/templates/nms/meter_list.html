@@ -5,7 +5,65 @@
 {% block body %}
 <div class="row">
   <div class="col-md-12">
-    {% render_table table %}
+    <div class="row">
+      <div class="col-md-12">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h5>Station Status</h5>
+	  </div>
+	  <div class="panel-body">
+	    <table class="table table-condensed">
+	      <tbody>
+		<tr>
+		  <td>Station Address</td>
+		  <td>{{ station_status.stationaddress }}</td>
+		</tr>
+		<tr>
+		  <td>RSSI</td>
+		  <td>{{ station_status.rssi }}</td>
+		</tr>
+		<tr>
+		  <td>Batt</td>
+		  <td>{{ station_status.batt }}</td>
+		</tr>
+		<tr>
+		  <td>Temp</td>
+		  <td>{{ station_status.temp }}</td>
+		</tr>
+		<tr>
+		  <td>SN</td>
+		  <td>{{ station_status.sn }}</td>
+		</tr>
+		<tr>
+		  <td>TX</td>
+		  <td>{{ station_status.tx }}</td>
+		</tr>
+		<tr>
+		  <td>PE</td>
+		  <td>{{ station_status.pe }}</td>
+		</tr>
+		<tr>
+		  <td>RE</td>
+		  <td>{{ station_status.re }}</td>
+		</tr>
+	      </tbody>
+	    </table>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h5>Meters</h5>
+	  </div>
+	  <div class="panel-body">
+	    {% render_table table %}
+	  </div>
+	</div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
