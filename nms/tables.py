@@ -80,6 +80,7 @@ class ModeTable(tables.Table):
 class MeterInfoTable(tables.Table):
     id = tables.LinkColumn('meter_info_detail',
                            args=[tables.utils.A('pk')])
+    meter = tables.Column(accessor='related_meter.modbusaddress')
     class Meta:
         model = MeterInfo
         attrs = {'class': "table table-condensed rowlink",
