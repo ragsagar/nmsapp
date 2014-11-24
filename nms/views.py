@@ -6,7 +6,7 @@ from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin
 
 from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
-                     MeterInfo)
+                     MeterInfo, StationStatus)
 from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
                      MeterInfoTable)
@@ -34,6 +34,20 @@ class MeterListView(LoginRequiredMixin, SingleTableView):
         station = get_object_or_404(Station, pk=pk)
         queryset = queryset.filter(stationaddress=station)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        """
+        Pass the latest station status to the context.
+        """
+        context = super(MeterListView, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        station = get_object_or_404(Station, pk=pk)
+        try:
+            station_status = station.statuses.latest('nmsrealtime')
+        except StationStatus.DoesNotExist:
+            station_status = None
+        context['station_status'] = station_status
+        return context
 
 
 class MeterDetailView(LoginRequiredMixin, DetailView):
