@@ -205,3 +205,22 @@ class StationLocation(models.Model):
                                        related_name='station_location')
     gps_lat = models.FloatField(blank=True, null=True)
     gps_lon = models.FloatField(blank=True, null=True)
+
+
+class Tower(models.Model):
+    x_coordinate = models.IntegerField()
+    y_coordinate = models.IntegerField()
+    grid_x = models.IntegerField()
+    grid_y = models.IntegerField()
+    water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
+
+    
+class Well(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    type = models.IntegerField(choices=TYPES, default=TYPES.water_injector)
+    max_allowed_flowrate = models.IntegerField(
+                            verbose_name="Maximum Allowed Flowrate BPD")
+    location = models.CharField(max_length=255)
+    current_zone = models.CharField(max_length=255)
+    x_mass_tree = models.TextField()
+    tower = models.ForeignKey(Tower, related_name='towers')
