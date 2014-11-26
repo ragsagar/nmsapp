@@ -240,7 +240,14 @@ class Well(models.Model):
         (8, 'eight', 'Eight'),
         (9, 'nine', 'Nine'),
         )
-    
+    STRINGS = Choices(
+        (1, 'one', 'One'),
+        (2, 'two', 'Two'),
+        (3, 'three', 'Three'),
+        (4, 'four', 'Four'),
+        (5, 'five', 'Five'),
+        (6, 'six', 'Six'),
+        )
     created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255)
     slot = models.IntegerField(choices=SLOTS, default=SLOTS.one)
