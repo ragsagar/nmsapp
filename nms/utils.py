@@ -3,7 +3,7 @@ import subprocess
 def is_nms_running():
     """ Check if the LinuxNMS command is running or not.
     Returns True if nms is running."""
-    command = ['ps', '-C', 'LinuxNMS']
+    command = ['/bin/ps', '-C', 'LinuxNMS']
     returncode = subprocess.call(command)
     if returncode == 0:
         return True
