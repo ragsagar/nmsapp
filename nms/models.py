@@ -2,6 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse_lazy
 from django.utils.functional import cached_property
 
+from model_utils import Choices
 
 class Station(models.Model):
     stationaddress = models.IntegerField(primary_key=True,
@@ -214,8 +215,14 @@ class Tower(models.Model):
     grid_y = models.IntegerField()
     water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
 
+    def __unicode__(self):
+        return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
+
     
 class Well(models.Model):
+    TYPES = Choices(
+        (1, 'water_injector', 'Water Injector'),
+        )
     created = models.DateTimeField(auto_now_add=True)
     type = models.IntegerField(choices=TYPES, default=TYPES.water_injector)
     max_allowed_flowrate = models.IntegerField(
@@ -224,3 +231,6 @@ class Well(models.Model):
     current_zone = models.CharField(max_length=255)
     x_mass_tree = models.TextField()
     tower = models.ForeignKey(Tower, related_name='towers')
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.location, self.current_zone)
