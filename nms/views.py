@@ -6,10 +6,10 @@ from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin
 
 from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
-                     MeterInfo, StationStatus)
+                     MeterInfo, StationStatus, Well, Tower)
 from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
-                     MeterInfoTable)
+                     MeterInfoTable, TowerTable, WellTable)
 
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -164,3 +164,34 @@ class UpdateModeView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('mode_detail',
                             kwargs={'pk': self.kwargs.get('pk')})
+
+
+class TowerListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all towers. """
+    model = Tower
+    table_class = TowerTable
+    template_name = 'nms/tower_list.html'
+    context_object_name = 'tower'
+
+
+class WellListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all wells. """
+    model = Well
+    table_class = WellTable
+    template_name = 'nms/well_list.html'
+    context_object_name = 'well'
+
+
+class TowerDetailView(LoginRequiredMixin, SingleTableView):
+    """ View to show the detail page and table of related metes. """
+    model = Well
+    table_class = WellTable
+    template_name = 'nms/tower_detail.html'
+
+    def get_context_data(self, **kwargs):
+        """ Pass the tower with the given pk to the context. """
+        context = super(TowerDetailView, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        tower = get_object_or_404(Tower, pk=pk)
+        context['tower'] = tower
+        return context
