@@ -175,14 +175,6 @@ class TowerListView(LoginRequiredMixin, SingleTableView):
     context_object_name = 'tower'
 
 
-class WellListView(LoginRequiredMixin, SingleTableView):
-    """ View to list all wells. """
-    model = Well
-    table_class = WellTable
-    template_name = 'nms/well_list.html'
-    context_object_name = 'well'
-
-
 class TowerDetailView(LoginRequiredMixin, SingleTableView):
     """ View to show the detail page and table of related metes. """
     model = Well
@@ -202,9 +194,22 @@ class CreateTowerView(LoginRequiredMixin, CreateView):
     """ View to create new tower. """
     model = Tower
 
+    
 class UpdateTowerView(LoginRequiredMixin, UpdateView):
     """ View to update an existing tower. """
     model = Tower
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
+    
+class WellListView(LoginRequiredMixin, SingleTableView):
+    """ View to list all wells. """
+    model = Well
+    table_class = WellTable
+    template_name = 'nms/well_list.html'
+    context_object_name = 'well'
+
+
+class WellDetailView(LoginRequiredMixin, DetailView):
+    """ View to show the well detail page """
+    model = Well
+    template_name = 'nms/well_detail.html'
+    context_object_name = 'well'
