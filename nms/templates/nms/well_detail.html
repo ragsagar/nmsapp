@@ -6,7 +6,8 @@
   <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>Well</h4>
+	  Well
+	  <a href="{% url 'update_well' pk=well.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
         </div>
         <div class="panel-body">
             <table class="table table-condensed">
