@@ -1,7 +1,7 @@
 import django_tables2 as tables
 
 from .models import (Station, Meter, Hourly, Daily, Reading, Log,
-        Mode, MeterInfo)
+                     Mode, MeterInfo, Well, Tower)
 
 
 class StationTable(tables.Table):
@@ -86,3 +86,18 @@ class MeterInfoTable(tables.Table):
         attrs = {'class': "table table-condensed rowlink",
                  'data-link': 'row'}
 
+
+class TowerTable(tables.Table):
+    id = tables.LinkColumn('tower_detail',
+                           args=[tables.utils.A('pk')])
+    class Meta:
+        model = Tower
+        attrs = {'class': "table table-condensed rowlink",
+                 'data-link': 'row'}
+
+
+class WellTable(tables.Table):
+    class Meta:
+        model = Well
+        attrs = {'class': "table table-condensed rowlink",
+                 'data-link': 'row'}
