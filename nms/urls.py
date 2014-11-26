@@ -7,7 +7,7 @@ from .views import (StationListView, MeterListView, MeterDetailView,
                     CreateMeterView, UpdateMeterInfoView, ModeDetailView,
                     UpdateModeView, TowerListView, TowerDetailView,
                     WellListView, CreateTowerView, UpdateTowerView,
-                    WellDetailView,)
+                    WellDetailView, CreateWellView, UpdateWellView)
 
 
 urlpatterns = patterns('',
@@ -51,6 +51,10 @@ urlpatterns = patterns('',
             WellListView.as_view(), name='well_list'),
         url(r'^wells/(?P<pk>\d+)/$',
             WellDetailView.as_view(), name='well_detail'),
+        url(r'^wells/create/$',
+            CreateWellView.as_view(), name='create_well'),
+        url(r'^wells/(?P<pk>\d+)/update/$',
+            UpdateWellView.as_view(), name='update_well'),
         url(r'^accounts/login/$',
             'django.contrib.auth.views.login', name='login'),
         url(r'^accounts/logout/$',
