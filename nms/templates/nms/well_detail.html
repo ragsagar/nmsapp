@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Well</h4>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+              <tbody>
+		<tr>
+		  <td>Type</td>
+		  <td>{{ well.get_type_display }}</td>
+		</tr>
+		<tr>
+		  <td>Maximum Allowed Flowrate BPD</td>
+		  <td>{{ well.max_allowed_flowrate }}</td>
+		</tr>
+		<tr>
+		  <td>Location</td>
+		  <td>{{ well.location }}</td>
+		</tr>
+		<tr>
+		  <td>Current Zone</td>
+		  <td>{{ well.current_zone }}</td>
+		</tr>
+		<tr>
+		  <td>X Mass Tree</td>
+		  <td>{{ well.x_mass_tree }}</td>
+		</tr>
+		<tr>
+		  <td>Tower</td>
+		  <td><a href="{{ well.tower.get_absolute_url }}">{{ well.tower }}</a></td>
+		</tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
