@@ -97,6 +97,8 @@ class TowerTable(tables.Table):
 
 
 class WellTable(tables.Table):
+    id = tables.LinkColumn('well_detail',
+                           args=[tables.utils.A('pk')])
     class Meta:
         model = Well
         attrs = {'class': "table table-condensed rowlink",
