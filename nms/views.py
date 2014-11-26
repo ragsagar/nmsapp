@@ -39,6 +39,7 @@ class MeterListView(LoginRequiredMixin, SingleTableView):
         """
         Pass the latest station status to the context.
         """
+
         context = super(MeterListView, self).get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
         station = get_object_or_404(Station, pk=pk)
@@ -195,3 +196,15 @@ class TowerDetailView(LoginRequiredMixin, SingleTableView):
         tower = get_object_or_404(Tower, pk=pk)
         context['tower'] = tower
         return context
+
+
+class CreateTowerView(LoginRequiredMixin, CreateView):
+    """ View to create new tower. """
+    model = Tower
+
+class UpdateTowerView(LoginRequiredMixin, UpdateView):
+    """ View to update an existing tower. """
+    model = Tower
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

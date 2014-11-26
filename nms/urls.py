@@ -5,7 +5,7 @@ from .views import (StationListView, MeterListView, MeterDetailView,
         CreateMeterInfoView, CreateStationView, MeterInfoDetailView,
                     CreateMeterView, UpdateMeterInfoView, ModeDetailView,
                     UpdateModeView, TowerListView, TowerDetailView,
-                    WellListView)
+                    WellListView, CreateTowerView, UpdateTowerView)
 
 
 urlpatterns = patterns('',
@@ -41,6 +41,10 @@ urlpatterns = patterns('',
             TowerListView.as_view(), name='tower_list'),
         url(r'^towers/(?P<pk>\d+)/$',
             TowerDetailView.as_view(), name='tower_detail'),
+        url(r'^towers/create/$',
+            CreateTowerView.as_view(), name='create_tower'),
+        url(r'^towers/update/(?P<pk>\d+)/$',
+            UpdateTowerView.as_view(), name='update_tower'),
         url(r'^wells/$',
             WellListView.as_view(), name='well_list'),
         url(r'^accounts/login/$',
