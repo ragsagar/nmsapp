@@ -235,5 +235,8 @@ class Well(models.Model):
     x_mass_tree = models.TextField()
     tower = models.ForeignKey(Tower, related_name='towers')
 
+    def get_absolute_url(self):
+        return reverse_lazy('well_detail', kwargs={'pk': self.pk})
+
     def __unicode__(self):
         return u"%s - %s" % (self.location, self.current_zone)
