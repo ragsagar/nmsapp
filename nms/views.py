@@ -1,15 +1,16 @@
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse_lazy
 
 from django_tables2 import SingleTableView, RequestConfig
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
                      MeterInfo, StationStatus, Well, Tower)
 from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
                      MeterInfoTable, TowerTable, WellTable)
+from .utils import is_nms_running, start_nms, stop_nms
 
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -74,13 +75,6 @@ class MeterDetailView(LoginRequiredMixin, DetailView):
                         'hourly_table': hourly_table,
                         'interval_table': interval_table})
         return context
-
-
-class LogListView(LoginRequiredMixin, SingleTableView):
-    """ View to list all logs. """
-    model = Log
-    template_name = "nms/log_list.html"
-    table_class = LogTable
 
 
 class ModeListView(LoginRequiredMixin, SingleTableView):
@@ -222,3 +216,32 @@ class CreateWellView(LoginRequiredMixin, CreateView):
 class UpdateWellView(LoginRequiredMixin, UpdateView):
     """ View to update new wells. """
     model = Well
+
+
+class ControlPanelView(LoginRequiredMixin,
+                       StaffuserRequiredMixin,
+                       SingleTableView):
+    """ View to list all logs. """
+    model = Log
+    template_name = "nms/control_panel.html"
+    table_class = LogTable
+
+    def get_context_data(self, **kwargs):
+        """ Pass the state of nms to the context. """
+        context = super(ControlPanelView, self).get_context_data(**kwargs)
+        context['is_nms_running'] = is_nms_running()
+        return context
+
+
+class ToggleNMSView(LoginRequiredMixin,
+                    StaffuserRequiredMixin,
+                    View):
+    """ View to toggle the state of NMS. """
+    def post(self, request, *args, **kwargs):
+        """ Turn NMS on if it is not running, otherwise
+        start it."""
+        if is_nms_running():
+            stop_nms()
+        else:
+            start_nms()
+        return redirect(reverse_lazy('control_panel'))
