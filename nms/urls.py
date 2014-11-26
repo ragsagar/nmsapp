@@ -1,13 +1,14 @@
 from django.conf.urls import patterns, url
 
 from .views import (StationListView, MeterListView, MeterDetailView,
-                    LogListView, MeterInfoListView, ModeListView,
+                    MeterInfoListView, ModeListView,
                     CreateModeView, CreateMeterInfoView,
                     CreateStationView, MeterInfoDetailView,
                     CreateMeterView, UpdateMeterInfoView, ModeDetailView,
                     UpdateModeView, TowerListView, TowerDetailView,
                     WellListView, CreateTowerView, UpdateTowerView,
-                    WellDetailView, CreateWellView, UpdateWellView)
+                    WellDetailView, CreateWellView, UpdateWellView,
+                    ControlPanelView, ToggleNMSView)
 
 
 urlpatterns = patterns('',
@@ -21,8 +22,10 @@ urlpatterns = patterns('',
             MeterDetailView.as_view(), name='meter_detail'),
         url(r'^meter/(?P<pk>\d+)/create/$',
             CreateMeterView.as_view(), name='create_meter'),
-        url(r'^logs/$',
-            LogListView.as_view(), name='list_logs'),
+        url(r'^control_panel/$',
+            ControlPanelView.as_view(), name='control_panel'),
+        url(r'^toggle_nms/$',
+            ToggleNMSView.as_view(), name='toggle_nms'),
         url(r'^meter_infos/$',
             MeterInfoListView.as_view(), name='list_meter_infos'),
         url(r'^meter_infos/(?P<pk>\d+)/$',
