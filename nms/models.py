@@ -215,6 +215,9 @@ class Tower(models.Model):
     grid_y = models.IntegerField()
     water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
 
+    def get_absolute_url(self):
+        return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
+
     def __unicode__(self):
         return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
 
