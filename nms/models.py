@@ -209,11 +209,14 @@ class StationLocation(models.Model):
 
 
 class Tower(models.Model):
-    x_coordinate = models.IntegerField()
-    y_coordinate = models.IntegerField()
+    name = models.CharField(max_length=255)
+    x_coordinate = models.IntegerField(verbose_name='X Coordinates(UTM)')
+    y_coordinate = models.IntegerField(verbose_name='Y Coordinates(UTM)')
     grid_x = models.IntegerField()
     grid_y = models.IntegerField()
     water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
+    helideck_height = models.IntegerField(
+                             verbose_name='Helideck Height(feets)')
 
     def get_absolute_url(self):
         return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
@@ -226,13 +229,28 @@ class Well(models.Model):
     TYPES = Choices(
         (1, 'water_injector', 'Water Injector'),
         )
+    SLOTS = Choices(
+        (1, 'one', 'One'),
+        (2, 'two', 'Two'),
+        (3, 'three', 'Three'),
+        (4, 'four', 'Four'),
+        (5, 'five', 'Five'),
+        (6, 'six', 'Six'),
+        (7, 'seven', 'Seven'),
+        (8, 'eight', 'Eight'),
+        (9, 'nine', 'Nine'),
+        )
+    
     created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    slot = models.IntegerField(choices=SLOTS, default=SLOTS.one)
     type = models.IntegerField(choices=TYPES, default=TYPES.water_injector)
+    string = models.IntegerField(choices=STRINGS, default=STRINGS.one)
     max_allowed_flowrate = models.IntegerField(
                             verbose_name="Maximum Allowed Flowrate BPD")
     location = models.CharField(max_length=255)
     current_zone = models.CharField(max_length=255)
-    x_mass_tree = models.TextField()
+    xmas_tree = models.CharField(max_length=255)
     tower = models.ForeignKey(Tower, related_name='towers')
 
     def get_absolute_url(self):
