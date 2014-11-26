@@ -1,11 +1,13 @@
 from django.conf.urls import patterns, url
 
 from .views import (StationListView, MeterListView, MeterDetailView,
-        LogListView, MeterInfoListView, ModeListView, CreateModeView,
-        CreateMeterInfoView, CreateStationView, MeterInfoDetailView,
+                    LogListView, MeterInfoListView, ModeListView,
+                    CreateModeView, CreateMeterInfoView,
+                    CreateStationView, MeterInfoDetailView,
                     CreateMeterView, UpdateMeterInfoView, ModeDetailView,
                     UpdateModeView, TowerListView, TowerDetailView,
-                    WellListView, CreateTowerView, UpdateTowerView)
+                    WellListView, CreateTowerView, UpdateTowerView,
+                    WellDetailView,)
 
 
 urlpatterns = patterns('',
@@ -47,6 +49,8 @@ urlpatterns = patterns('',
             UpdateTowerView.as_view(), name='update_tower'),
         url(r'^wells/$',
             WellListView.as_view(), name='well_list'),
+        url(r'^wells/(?P<pk>\d+)/$',
+            WellDetailView.as_view(), name='well_detail'),
         url(r'^accounts/login/$',
             'django.contrib.auth.views.login', name='login'),
         url(r'^accounts/logout/$',
