@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	Tower Details
+      </div>
+      <div class="panel-body">
+	<table class="table table-condensed">
+	  <tbody>
+	    <tr>
+	      <td>X Cordinate</td>
+	      <td>{{ tower.x_coordinate }}</td>
+	    </tr>
+	    <tr>
+	      <td>Y Cordinate</td>
+	      <td>{{ tower.y_coordinate }}</td>
+	    </tr>
+	    <tr>
+	      <td>Grid X</td>
+	      <td>{{ tower.grid_x }}</td>
+	    </tr>
+	    <tr>
+	      <td>Grid Y</td>
+	      <td>{{ tower.grid_y }}</td>
+	    </tr>
+	    <tr>
+	      <td>Water Depth</td>
+	      <td>{{ tower.water_depth }} feets</td>
+	    </tr>
+	  </tbody>
+	</table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	Wells
+      </div>
+      <div class="panel-body">
+	{% render_table table %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
