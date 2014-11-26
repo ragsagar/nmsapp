@@ -5,7 +5,30 @@
 {% block body %}
 <div class="row">
   <div class="col-md-12">
-    {% render_table table %}
+    <div class="panel panel-{% if is_nms_running %}info{% else %}danger{% endif %}">
+      <div class="panel-heading">{% if is_nms_running %}NMS Running{% else %}NMS Not Running{% endif %}</div>
+      <div class="panel-body">
+	<form method="POST" action="{% url 'toggle_nms' %}">
+	  {% csrf_token %}
+	  {% if is_nms_running %}
+	  <button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-stop">Stop</span></button>
+	  {% else %}
+	  <button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play">Start</span></button>
+	  {% endif %}
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Logs</div>
+      <div class="panel-body">
+	{% render_table table %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
