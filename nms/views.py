@@ -213,3 +213,12 @@ class WellDetailView(LoginRequiredMixin, DetailView):
     model = Well
     template_name = 'nms/well_detail.html'
     context_object_name = 'well'
+
+
+class CreateWellView(LoginRequiredMixin, CreateView):
+    """ View to create new wells. """
+    model = Well
+
+class UpdateWellView(LoginRequiredMixin, UpdateView):
+    """ View to update new wells. """
+    model = Well
