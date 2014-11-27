@@ -7,7 +7,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4>Meter Info</h4>
-            <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-primary">Edit</a>
+            {% if user.is_staff %}
+	    <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-primary">Edit</a>
+	    {% endif %}
         </div>
         <div class="panel-body">
             <table class="table table-condensed">
@@ -23,7 +25,7 @@
                     <td>
                         <a href="{{ meter_info.related_meter.get_absolute_url }}"> {{ meter_info.related_meter.modbusaddress }}</a>
                     </td>
-                    {% else %}
+                    {% elif user.is_staff %}
                     <td>
             <a class="btn btn-default btn-sm" href="{% url 'create_meter' pk=meter_info.pk %}">Modbus Settings</a>
                     </td>
