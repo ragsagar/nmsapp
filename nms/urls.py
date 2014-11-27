@@ -9,7 +9,7 @@ from .views import (StationListView, MeterListView, MeterDetailView,
                     WellListView, CreateTowerView, UpdateTowerView,
                     WellDetailView, CreateWellView, UpdateWellView,
                     ControlPanelView, ToggleNMSView, UserListView,
-                    CreateUserView)
+                    CreateUserView, UserDetailView)
 
 
 urlpatterns = patterns('',
@@ -63,6 +63,8 @@ urlpatterns = patterns('',
             UserListView.as_view(), name='user_list'),
         url(r'users/create/$',
             CreateUserView.as_view(), name='create_user'),
+        url(r'users/(?P<pk>\d+)/$',
+            UserDetailView.as_view(), name='user_detail'),
         url(r'^accounts/login/$',
             'django.contrib.auth.views.login', name='login'),
         url(r'^accounts/logout/$',

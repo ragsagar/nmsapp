@@ -290,4 +290,13 @@ class CreateUserView(LoginRequiredMixin,
     template_name = 'nms/user_form.html'
     success_url = reverse_lazy('user_list')
     fields = ('username', 'is_active', 'is_staff')
+
+
+class UserDetailView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     DetailView):
+    """ View to show user detail page. """
+    model = User
+    template_name = 'nms/user_detail.html'
+    context_object_name = 'user_obj'
         
