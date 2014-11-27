@@ -106,7 +106,11 @@ class WellTable(tables.Table):
         attrs = {'class': "table table-condensed rowlink",
                  'data-link': 'row'}
 
+        
 class UserTable(tables.Table):
+    id = tables.LinkColumn('user_detail',
+                           args=[tables.utils.A('pk')])
+    
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
