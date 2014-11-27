@@ -3,6 +3,7 @@
 
 
 {% block body %}
+{% if user.is_staff %}
 <div class="row">
     <div class="col-md-2">
         <a type="button" class="btn btn-default" aria-label="Create Meter" href="{% url 'create_meter_info' %}">
@@ -11,6 +12,7 @@
     </div>
     <div class="col-md-10"></div>
 </div>
+{% endif %}
 <div class="row">
   <div class="col-md-12">
     {% render_table table %}
