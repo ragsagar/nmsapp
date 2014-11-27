@@ -12,6 +12,7 @@ from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
                      MeterInfoTable, TowerTable, WellTable, UserTable)
 from .utils import is_nms_running, start_nms, stop_nms
+from .forms import CreateUserForm
 
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -278,3 +279,15 @@ class UserListView(LoginRequiredMixin,
     model = User
     table_class = UserTable
     template_name = 'nms/user_list.html'
+
+    
+class CreateUserView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     CreateView):
+    """ View to create new users. """
+    model = User
+    form_class = CreateUserForm
+    template_name = 'nms/user_form.html'
+    success_url = reverse_lazy('user_list')
+    fields = ('username', 'is_active', 'is_staff')
+        
