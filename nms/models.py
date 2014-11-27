@@ -4,6 +4,66 @@ from django.utils.functional import cached_property
 
 from model_utils import Choices
 
+
+class Tower(models.Model):
+    name = models.CharField(max_length=255)
+    x_coordinate = models.IntegerField(verbose_name='X Coordinates(UTM)')
+    y_coordinate = models.IntegerField(verbose_name='Y Coordinates(UTM)')
+    grid_x = models.IntegerField()
+    grid_y = models.IntegerField()
+    water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
+    helideck_height = models.IntegerField(
+                             verbose_name='Helideck Height(feets)')
+
+    def get_absolute_url(self):
+        return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
+
+
+class Well(models.Model):
+    TYPES = Choices(
+        (1, 'water_injector', 'Water Injector'),
+        )
+    SLOTS = Choices(
+        (1, 'one', 'One'),
+        (2, 'two', 'Two'),
+        (3, 'three', 'Three'),
+        (4, 'four', 'Four'),
+        (5, 'five', 'Five'),
+        (6, 'six', 'Six'),
+        (7, 'seven', 'Seven'),
+        (8, 'eight', 'Eight'),
+        (9, 'nine', 'Nine'),
+        )
+    STRINGS = Choices(
+        (1, 'one', 'One'),
+        (2, 'two', 'Two'),
+        (3, 'three', 'Three'),
+        (4, 'four', 'Four'),
+        (5, 'five', 'Five'),
+        (6, 'six', 'Six'),
+        )
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    slot = models.IntegerField(choices=SLOTS, default=SLOTS.one)
+    type = models.IntegerField(choices=TYPES, default=TYPES.water_injector)
+    string = models.IntegerField(choices=STRINGS, default=STRINGS.one)
+    max_allowed_flowrate = models.IntegerField(
+                            verbose_name="Maximum Allowed Flowrate BPD")
+    location = models.CharField(max_length=255)
+    current_zone = models.CharField(max_length=255)
+    xmas_tree = models.CharField(max_length=255)
+    tower = models.ForeignKey(Tower, related_name='towers')
+
+    def get_absolute_url(self):
+        return reverse_lazy('well_detail', kwargs={'pk': self.pk})
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.location, self.current_zone)
+
+    
 class Station(models.Model):
     stationaddress = models.IntegerField(primary_key=True,
                                          verbose_name='Station Address')
@@ -69,7 +129,7 @@ class Meter(models.Model):
     hourlyrecords  = models.IntegerField(blank=True, null=True)
     dailyrecords  = models.IntegerField(blank=True, null=True)
     meter_info = models.ForeignKey(MeterInfo, related_name='meters')
-    well = models.ForeignKey(Well, related_name='meters')
+    well = models.ForeignKey(Well, related_name='meters', null=True)
 
     def get_absolute_url(self):
         return reverse_lazy('meter_detail',
@@ -208,61 +268,10 @@ class StationLocation(models.Model):
     gps_lat = models.FloatField(blank=True, null=True)
     gps_lon = models.FloatField(blank=True, null=True)
 
-
-class Tower(models.Model):
-    name = models.CharField(max_length=255)
-    x_coordinate = models.IntegerField(verbose_name='X Coordinates(UTM)')
-    y_coordinate = models.IntegerField(verbose_name='Y Coordinates(UTM)')
-    grid_x = models.IntegerField()
-    grid_y = models.IntegerField()
-    water_depth = models.IntegerField(verbose_name="Water Depth(feet)")
-    helideck_height = models.IntegerField(
-                             verbose_name='Helideck Height(feets)')
-
-    def get_absolute_url(self):
-        return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
-
-    def __unicode__(self):
-        return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
-
     
-class Well(models.Model):
-    TYPES = Choices(
-        (1, 'water_injector', 'Water Injector'),
-        )
-    SLOTS = Choices(
-        (1, 'one', 'One'),
-        (2, 'two', 'Two'),
-        (3, 'three', 'Three'),
-        (4, 'four', 'Four'),
-        (5, 'five', 'Five'),
-        (6, 'six', 'Six'),
-        (7, 'seven', 'Seven'),
-        (8, 'eight', 'Eight'),
-        (9, 'nine', 'Nine'),
-        )
-    STRINGS = Choices(
-        (1, 'one', 'One'),
-        (2, 'two', 'Two'),
-        (3, 'three', 'Three'),
-        (4, 'four', 'Four'),
-        (5, 'five', 'Five'),
-        (6, 'six', 'Six'),
-        )
-    created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=255)
-    slot = models.IntegerField(choices=SLOTS, default=SLOTS.one)
-    type = models.IntegerField(choices=TYPES, default=TYPES.water_injector)
-    string = models.IntegerField(choices=STRINGS, default=STRINGS.one)
-    max_allowed_flowrate = models.IntegerField(
-                            verbose_name="Maximum Allowed Flowrate BPD")
-    location = models.CharField(max_length=255)
-    current_zone = models.CharField(max_length=255)
-    xmas_tree = models.CharField(max_length=255)
-    tower = models.ForeignKey(Tower, related_name='towers')
 
-    def get_absolute_url(self):
-        return reverse_lazy('well_detail', kwargs={'pk': self.pk})
 
-    def __unicode__(self):
-        return u"%s - %s" % (self.location, self.current_zone)
+
+
+
+
