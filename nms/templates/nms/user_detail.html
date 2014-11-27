@@ -7,7 +7,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
           <h4>
-	    User Details
+	    {{ user_obj.first_name }} {{ user_obj.last_name }}
 	    {% if user_obj.is_staff %}<span class="badge alert-info">Staff</span>{% endif %}
 	    {% if user_obj.is_active %}<span class="badge">Active</span>{% endif %}
 	  </h4>
@@ -16,7 +16,6 @@
             <table class="table table-condensed">
               <tbody>
 		<tr><td>Username</td><td>{{ user_obj.username }}</td></tr>
-		<tr><td>Name</td><td>{{ user_obj.first_name }} {{ user_obj.last_name }}</td></tr>
 		<tr><td>Email</td><td>{{ user_obj.email }}</td></tr>
 		<tr><td>Date Joined</td><td>{{ user_obj.date_joined }}</td></tr>
             </table>
