@@ -77,7 +77,9 @@ class MeterDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ModeListView(LoginRequiredMixin, SingleTableView):
+class ModeListView(LoginRequiredMixin,
+                   StaffuserRequiredMixin,
+                   SingleTableView):
     """ View to list all Modes. """
     model = Mode
     template_name = "nms/mode_list.html"
@@ -93,7 +95,9 @@ class MeterInfoListView(LoginRequiredMixin, SingleTableView):
     queryset = MeterInfo.objects.all().prefetch_related('meters')
 
 
-class CreateMeterInfoView(LoginRequiredMixin, CreateView):
+class CreateMeterInfoView(LoginRequiredMixin,
+                          StaffuserRequiredMixin,
+                          CreateView):
     """ View to create new meter info. """
     model = MeterInfo
     success_url = reverse_lazy('list_meter_infos')
@@ -106,19 +110,25 @@ class MeterInfoDetailView(LoginRequiredMixin, DetailView):
     template_name = 'nms/meter_info_detail.html'
 
 
-class CreateModeView(LoginRequiredMixin, CreateView):
+class CreateModeView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     CreateView):
     """ View to create new modes. """
     model = Mode
     success_url = reverse_lazy('list_modes')
 
 
-class CreateStationView(LoginRequiredMixin, CreateView):
+class CreateStationView(LoginRequiredMixin,
+                        StaffuserRequiredMixin,
+                        CreateView):
     """ View to create new station. """
     model = Station
     success_url = reverse_lazy('list_stations')
 
 
-class CreateMeterView(LoginRequiredMixin, CreateView):
+class CreateMeterView(LoginRequiredMixin,
+                      StaffuserRequiredMixin,
+                      CreateView):
     """ View to create new meter. """
     model = Meter
     fields = ('stationaddress', 'modbusaddress', 'latestintervaltime',
@@ -137,7 +147,9 @@ class CreateMeterView(LoginRequiredMixin, CreateView):
         return redirect(meter_info.get_absolute_url())
 
 
-class UpdateMeterInfoView(LoginRequiredMixin, UpdateView):
+class UpdateMeterInfoView(LoginRequiredMixin,
+                          StaffuserRequiredMixin,
+                          UpdateView):
     """ View to update meter info. """
     model = MeterInfo
 
@@ -146,13 +158,17 @@ class UpdateMeterInfoView(LoginRequiredMixin, UpdateView):
                             kwargs={'pk': self.kwargs.get('pk')})
 
 
-class ModeDetailView(LoginRequiredMixin, DetailView):
+class ModeDetailView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     DetailView):
     """ View to show the mode detail page. """
     model = Mode
     template_name = 'nms/mode_detail.html'
 
 
-class UpdateModeView(LoginRequiredMixin, UpdateView):
+class UpdateModeView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     UpdateView):
     """ View to update mode. """
     model = Mode
 
@@ -184,12 +200,16 @@ class TowerDetailView(LoginRequiredMixin, SingleTableView):
         return context
 
 
-class CreateTowerView(LoginRequiredMixin, CreateView):
+class CreateTowerView(LoginRequiredMixin,
+                      StaffuserRequiredMixin,
+                      CreateView):
     """ View to create new tower. """
     model = Tower
 
     
-class UpdateTowerView(LoginRequiredMixin, UpdateView):
+class UpdateTowerView(LoginRequiredMixin,
+                      StaffuserRequiredMixin,
+                      UpdateView):
     """ View to update an existing tower. """
     model = Tower
 
@@ -209,11 +229,15 @@ class WellDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'well'
 
 
-class CreateWellView(LoginRequiredMixin, CreateView):
+class CreateWellView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     CreateView):
     """ View to create new wells. """
     model = Well
 
-class UpdateWellView(LoginRequiredMixin, UpdateView):
+class UpdateWellView(LoginRequiredMixin,
+                     StaffuserRequiredMixin,
+                     UpdateView):
     """ View to update new wells. """
     model = Well
 
