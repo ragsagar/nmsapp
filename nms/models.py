@@ -8,10 +8,10 @@ class Station(models.Model):
     stationaddress = models.IntegerField(primary_key=True,
                                          verbose_name='Station Address')
     lateststatustime = models.DateTimeField(verbose_name='Latest Status Time')
+    tower = models.ForeignKey(Tower, null=True, related_name='stations')
 
     def __unicode__(self):
         return u"%s" % self.stationaddress
-    
 
 
 class StationStatus(models.Model): 
@@ -69,6 +69,7 @@ class Meter(models.Model):
     hourlyrecords  = models.IntegerField(blank=True, null=True)
     dailyrecords  = models.IntegerField(blank=True, null=True)
     meter_info = models.ForeignKey(MeterInfo, related_name='meters')
+    well = models.ForeignKey(Well, related_name='meters')
 
     def get_absolute_url(self):
         return reverse_lazy('meter_detail',
