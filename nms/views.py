@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, CreateView, UpdateView, View
+from django.views.generic import DetailView, CreateView, UpdateView, View, FormView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
@@ -300,3 +301,24 @@ class UserDetailView(LoginRequiredMixin,
     template_name = 'nms/user_detail.html'
     context_object_name = 'user_obj'
         
+
+class ChangeMyPasswordView(LoginRequiredMixin,
+                           FormView):
+    """ View to change one's own password. """
+    model = User
+    template_name = 'nms/user_form.html'
+    success_url = reverse_lazy('list_stations')
+    form_class = PasswordChangeForm
+
+    def form_valid(self, form):
+        """ Save the form if it is valid. """
+        form.save()
+        return redirect(self.get_success_url())
+        
+
+    def get_form_kwargs(self):
+        """ Pass the currently loggen in user to the form init."""
+        kwargs = super(ChangeMyPasswordView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
