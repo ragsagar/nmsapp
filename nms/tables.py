@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 import django_tables2 as tables
 
 from .models import (Station, Meter, Hourly, Daily, Reading, Log,
@@ -103,3 +105,12 @@ class WellTable(tables.Table):
         model = Well
         attrs = {'class': "table table-condensed rowlink",
                  'data-link': 'row'}
+
+class UserTable(tables.Table):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email',
+                  'is_staff', 'is_active', 'date_joined')
+        attrs = {'class': "table table-condensed rowlink",
+                 'data-link': 'row'}
+
