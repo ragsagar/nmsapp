@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, CreateView, UpdateView, View
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
 
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
@@ -9,7 +10,7 @@ from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
                      MeterInfo, StationStatus, Well, Tower)
 from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
-                     MeterInfoTable, TowerTable, WellTable)
+                     MeterInfoTable, TowerTable, WellTable, UserTable)
 from .utils import is_nms_running, start_nms, stop_nms
 
 
@@ -269,3 +270,11 @@ class ToggleNMSView(LoginRequiredMixin,
         else:
             start_nms()
         return redirect(reverse_lazy('control_panel'))
+
+
+class UserListView(LoginRequiredMixin,
+                   StaffuserRequiredMixin,
+                   SingleTableView):
+    model = User
+    table_class = UserTable
+    template_name = 'nms/user_list.html'
