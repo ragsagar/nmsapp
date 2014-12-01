@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load crispy_forms_tags %}
 
 {% block sidebar %}
     {% include '_sidebar.html' with flowmetermenu="active" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/meterinfo_form.js' %}"></script>
 {% endblock %}
 
 {% block page_title %}
@@ -24,7 +29,7 @@ New Flow Meter
                 </form>
             </div>
         </div>
-    
     </div>
 </div>
+<div id="strings_json_url" data-url="{% url 'strings_json' %}"></div>
 {% endblock %}
