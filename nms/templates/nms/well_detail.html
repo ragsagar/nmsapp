@@ -50,6 +50,32 @@ Well Detail
             </table>
         </div>
     </div>
+    <div>
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <div class="panel-title">
+	    Strings
+	    <a href="{% url 'create_string' pk=well.pk %}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-plus"></span></a>
+	  </div>
+	</div>
+	<div class="panel-body">
+	  <table class="table table-condensed">
+	    <thead>
+	      <tr>
+		<th>Number</th>
+		<th>Max Allowed Flow Rate</th>
+	      </tr>
+	    <tbody>
+	      {% for string in well.strings.all %}
+	      <tr>
+		<td>{{ string.get_number_display }}</td>
+		<td>{{ string.max_allowed_flowrate }}</td>
+	      </tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+      </div>
   </div>
 </div>
 {% endblock %}
