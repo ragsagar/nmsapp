@@ -86,11 +86,31 @@ class StationStatus(models.Model):
     re = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
 
+    
+class String(models.Model):
+    STRINGS = Choices(
+        (1, 'one', 'One'),
+        (2, 'two', 'Two'),
+        (3, 'three', 'Three'),
+        (4, 'four', 'Four'),
+        (5, 'five', 'Five'),
+        (6, 'six', 'Six'),
+        )
+    created = models.DateTimeField(auto_now_add=True)
+    max_allowed_flowrate = models.FloatField()
+    number = models.IntegerField(choices=STRINGS,
+                                 default=STRINGS.one)
+    well = models.ForeignKey(Well, related_name='strings')
+
+    def __unicode__(self):
+        return self.get_number_display()
+
 
 class MeterInfo(models.Model):
     tag = models.TextField()
     pipeline = models.TextField()
     service = models.TextField()
+    string = models.ForeignKey(String, related_name=meter_infos, null=True)
 
     @cached_property
     def related_meter(self):
@@ -269,20 +289,3 @@ class StationLocation(models.Model):
     gps_lon = models.FloatField(blank=True, null=True)
 
     
-class String(models.Model):
-    STRINGS = Choices(
-        (1, 'one', 'One'),
-        (2, 'two', 'Two'),
-        (3, 'three', 'Three'),
-        (4, 'four', 'Four'),
-        (5, 'five', 'Five'),
-        (6, 'six', 'Six'),
-        )
-    created = models.DateTimeField(auto_now_add=True)
-    max_allowed_flowrate = models.FloatField()
-    number = models.IntegerField(choices=STRINGS,
-                                 default=STRINGS.one)
-    well = models.ForeignKey(Well, related_name='strings')
-
-    def __unicode__(self):
-        return self.get_number_display()
