@@ -7,22 +7,15 @@
 
 {% block page_title %}
 Tower List
+{% if user.is_staff %}
+<a type="button" class="btn btn-sm btn-default" aria-label="Create Tower" href="{% url 'create_tower' %}">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</a>
+{% endif %}
 {% endblock %}
 
 {% block body %}
-{% if user.is_staff %}
-<div class="row">
-        <div class="col-md-12">
-            <div class="panel">
-                <div class="panel-body">
-                    <a type="button" class="btn btn-default" aria-label="Create Tower" href="{% url 'create_tower' %}">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-</div>
-{% endif %}
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel">

@@ -7,18 +7,14 @@
 
 {% block page_title %}
 Wireless Mode
+<a type="button" class="btn btn-default btn-sm" aria-label="Create Mode" href="{% url 'create_mode' %}">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</a>
 {% endblock %}
 
 
 {% block body %}
-<div class="row">
-    <div class="col-md-2">
-        <a type="button" class="btn btn-default" aria-label="Create Mode" href="{% url 'create_mode' %}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </a>
-    </div>
-    <div class="col-md-10"></div>
-</div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel">

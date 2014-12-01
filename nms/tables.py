@@ -83,6 +83,11 @@ class MeterInfoTable(tables.Table):
     id = tables.LinkColumn('meter_info_detail',
                            args=[tables.utils.A('pk')])
     meter = tables.Column(accessor='related_meter.modbusaddress')
+    # table head class name conflict with bootstrap well
+    # So pass the well as hidden and add new well1 for showing in the 
+    # table
+    well = tables.Column(visible=False)
+    well1 = tables.Column(accessor='well')
     class Meta:
         model = MeterInfo
         attrs = {'class': "table table-condensed table-bordered rowlink",

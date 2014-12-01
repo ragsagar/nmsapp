@@ -7,20 +7,23 @@
 
 {% block page_title %}
 Well List
+{% if user.is_staff %}
+<a type="button" class="btn btn-default btn-sm" aria-label="Create Well" href="{% url 'create_well' %}">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</a>
+{% endif %}
 {% endblock %}
 
 
 {% block body %}
-{% if user.is_staff %}
+
 <div class="row">
     <div class="col-md-2">
-        <a type="button" class="btn btn-default" aria-label="Create Well" href="{% url 'create_well' %}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </a>
+        
     </div>
     <div class="col-md-10"></div>
 </div>
-{% endif %}
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel">
