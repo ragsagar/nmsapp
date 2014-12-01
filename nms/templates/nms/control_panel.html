@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with controlpanelmenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Control Panel
+{% endblock %}
+
 
 {% block body %}
 <div class="row">

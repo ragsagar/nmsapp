@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with radiomenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Meter List
+{% endblock %}
 
 {% block body %}
 <div class="row">

@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with towermenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Tower Detail
+{% endblock %}
+
 
 {% block body %}
 <div class="row">

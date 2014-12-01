@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with usersmenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Users Detail
+{% endblock %}
+
 {% block body %}
 <div class="row">
   <div class="col-md-12">

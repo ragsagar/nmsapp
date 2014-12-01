@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with radiomenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Station List
+{% endblock %}
+
 
 {% block body %}
 {% if user.is_staff %}
@@ -15,7 +23,11 @@
 {% endif %}
 <div class="row">
   <div class="col-md-12">
-    {% render_table table %}
+    <div class="panel">
+        <div class="panel-body">
+            {% render_table table %}
+        </div>
+    </div>
   </div>
 </div>
 {% endblock %}

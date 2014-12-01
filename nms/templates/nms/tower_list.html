@@ -1,21 +1,35 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with towermenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Tower List
+{% endblock %}
 
 {% block body %}
 {% if user.is_staff %}
 <div class="row">
-    <div class="col-md-2">
-        <a type="button" class="btn btn-default" aria-label="Create Tower" href="{% url 'create_tower' %}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </a>
-    </div>
-    <div class="col-md-10"></div>
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <a type="button" class="btn btn-default" aria-label="Create Tower" href="{% url 'create_tower' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
 </div>
 {% endif %}
 <div class="row">
-  <div class="col-md-12">
-    {% render_table table %}
-  </div>
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                {% render_table table %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
