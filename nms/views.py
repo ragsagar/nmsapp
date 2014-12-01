@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, CreateView, UpdateView, View, FormView
+from django.views.generic import (DetailView, CreateView, UpdateView, View,
+                                  FormView, TemplateView)
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
@@ -15,6 +16,11 @@ from .tables import (StationTable, MeterTable, DailyTable,
 from .utils import is_nms_running, start_nms, stop_nms
 from .forms import CreateUserForm
 
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """ View to render a dashbord template. """
+    template_name = 'nms/dashbord.html'
+    
 
 class StationListView(LoginRequiredMixin, SingleTableView):
     """ View to list all stations. """

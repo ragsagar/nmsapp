@@ -9,10 +9,13 @@ from .views import (StationListView, MeterListView, MeterDetailView,
                     WellListView, CreateTowerView, UpdateTowerView,
                     WellDetailView, CreateWellView, UpdateWellView,
                     ControlPanelView, ToggleNMSView, UserListView,
-                    CreateUserView, UserDetailView, ChangeMyPasswordView)
+                    CreateUserView, UserDetailView, ChangeMyPasswordView,
+                    DashboardView)
 
 
 urlpatterns = patterns('',
+        url(r'^dashboard/$',
+            DashboardView.as_view(), name='dashboard'),           
         url(r'^stations/$',
             StationListView.as_view(), name='list_stations'),
         url(r'^stations/(?P<pk>\d+)/meters/$',
