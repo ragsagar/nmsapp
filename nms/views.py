@@ -9,7 +9,7 @@ from django_tables2 import SingleTableView, RequestConfig
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
-                     MeterInfo, StationStatus, Well, Tower)
+                     MeterInfo, StationStatus, Well, Tower, String)
 from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
                      MeterInfoTable, TowerTable, WellTable, UserTable)
@@ -328,3 +328,19 @@ class ChangeMyPasswordView(LoginRequiredMixin,
         kwargs['user'] = self.request.user
         return kwargs
 
+
+class CreateStringView(LoginRequiredMixin,
+                       CreateView):
+    """ View to add strings to wells. """
+    model = String
+    fields = ('max_allowed_flowrate', 'number')
+
+    def form_valid(self, form):
+        """ Get the pk from the url and save the well 
+        with that pk as related well. """
+        self.object = form.save(commit=False)
+        pk = self.kwargs.get('pk')
+        well = get_object_or_404(Well, pk=pk)
+        self.object.well = well
+        self.object.save()
+        return redirect(well.get_absolute_url())
