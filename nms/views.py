@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django_tables2 import SingleTableView, RequestConfig
-from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+from braces.views import (LoginRequiredMixin, StaffuserRequiredMixin,
+                          JSONResponseMixin)
 
 from .models import (Station, Meter, Daily, Hourly, Reading, Log, Mode,
                      MeterInfo, StationStatus, Well, Tower, String)
@@ -14,7 +15,7 @@ from .tables import (StationTable, MeterTable, DailyTable,
                      HourlyTable, IntervalTable, LogTable, ModeTable,
                      MeterInfoTable, TowerTable, WellTable, UserTable)
 from .utils import is_nms_running, start_nms, stop_nms
-from .forms import CreateUserForm
+from .forms import CreateUserForm, WellForm
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -344,3 +345,25 @@ class CreateStringView(LoginRequiredMixin,
         self.object.well = well
         self.object.save()
         return redirect(well.get_absolute_url())
+
+
+class GetStringsJSONView(LoginRequiredMixin,
+                         JSONResponseMixin,
+                         View):
+    """ View to fetch the list of all strings
+    of a well. """
+    def get(self, request, *args, **kwargs):
+        """ Return the list of list of string 
+        number and it's pk as json. """
+        form = WellForm(request.GET)
+        if form.is_valid():
+            well = form.cleaned_data.get('well')
+            strings = well.strings.all().only('number')
+            response = []
+            for string in strings:
+                response.append({'pk': string.pk,
+                                 'number': string.get_number_display()})
+        else:
+            response = []
+        return self.render_json_response(response)
+            
