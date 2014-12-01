@@ -4,7 +4,7 @@ fetchStrings = function (well_pk){
     $.getJSON(strings_json_url, {'well': well_pk}, function(data){
 	    console.log(data)
 	    if(data.length > 0){
-		var options = '';
+		var options = '<option value="">----------</option>';
 		for(var i = 0; i < data.length; i++){
 		    options += '<option value="' + data[i].pk + '">' + data[i].number + '</option>';
 		}
