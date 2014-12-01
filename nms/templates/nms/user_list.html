@@ -7,18 +7,13 @@
 
 {% block page_title %}
 Users
+<a href="{% url 'create_user' %}" class="btn btn-sm btn-default">
+  <span class="glyphicon glyphicon-plus"></span>
+</a>
 {% endblock %}
 
 
 {% block body %}
-<div class="row">
-  <div class="col-md-2">
-    <a href="{% url 'create_user' %}" class="btn btn-sm btn-default">
-      <span class="glyphicon glyphicon-plus"></span>
-    </a>
-  </div>
-  <div class="col-md-10"></div>
-</div>
 
 <div class="row">
   <div class="col-md-12">
