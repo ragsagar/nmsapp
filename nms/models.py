@@ -110,7 +110,7 @@ class MeterInfo(models.Model):
     tag = models.TextField()
     pipeline = models.TextField()
     service = models.TextField()
-    string = models.ForeignKey(String, related_name=meter_infos, null=True)
+    string = models.ForeignKey(String, related_name='meter_infos', null=True)
 
     @cached_property
     def related_meter(self):
