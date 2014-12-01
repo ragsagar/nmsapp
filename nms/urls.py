@@ -10,7 +10,7 @@ from .views import (StationListView, MeterListView, MeterDetailView,
                     WellDetailView, CreateWellView, UpdateWellView,
                     ControlPanelView, ToggleNMSView, UserListView,
                     CreateUserView, UserDetailView, ChangeMyPasswordView,
-                    DashboardView, CreateStringView)
+                    DashboardView, CreateStringView, GetStringsJSONView)
 
 
 urlpatterns = patterns('',
@@ -64,6 +64,8 @@ urlpatterns = patterns('',
             UpdateWellView.as_view(), name='update_well'),
         url(r'^wells/(?P<pk>\d+)/strings/create/$',
             CreateStringView.as_view(), name='create_string'),
+        url(r'^strings/json/$', GetStringsJSONView.as_view(),
+            name='strings_json'),
         url(r'^users/$',
             UserListView.as_view(), name='user_list'),
         url(r'^users/create/$',
