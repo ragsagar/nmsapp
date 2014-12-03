@@ -2,8 +2,8 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.models import User
 
-from nms.models import Tower, Well
-from nms.tables import TowerTable, WellTable
+from nms.models import Tower, Well, Station
+from nms.tables import TowerTable, WellTable, StationTable
 
 class ViewTest(TestCase):
     def setUp(self):
@@ -17,6 +17,9 @@ class ViewTest(TestCase):
                                    type=Well.TYPES.water_injector, string=Well.STRINGS.one,
                                    max_allowed_flowrate=10, location='UAE', current_zone='Dubai',
                                    xmas_tree='Valtek', tower=tower)
+        station = Station.objects.create(stationaddress=123,
+                                         lateststatustime="2014-12-12 11:40",
+                                         tower=tower)
 
         
     def create_user(self, **kwargs):
@@ -36,6 +39,19 @@ class ViewTest(TestCase):
                 'helideck_height': ht
         }
         return Tower.objects.create(**data)
+
+    def test_stations_list(self):
+        url = reverse('list_stations')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        stations = Station.objects.all()
+        self.assertEqual(len(response.context_data['object_list']), stations.count())
+        self.assertTemplateUsed(response, 'nms/station_list.html')
+        self.assertIn('table', response.context_data)
+        self.assertIsInstance(response.context_data['table'], StationTable)
 
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
