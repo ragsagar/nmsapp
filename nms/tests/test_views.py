@@ -73,6 +73,21 @@ class ViewTest(TestCase):
         self.assertIn('table', response.context_data)
         self.assertIsInstance(response.context_data['table'], MeterTable)
 
+    def test_meter_detail(self):
+        meter = Meter.objects.all()[0]
+        url = reverse('meter_detail', kwargs={'pk': meter.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('meter', response.context_data)
+        self.assertIsInstance(response.context_data['meter'], MeterTable)
+        self.assertIsInstance(response.context_data['daily_table'], DailyTable)
+        self.assertIsInstance(response.context_data['hourly_table'], HourlyTable)
+        self.assertIsInstance(response.context_data['interval_table'], IntervalTable)
+        self.assertTemplateUsed(response, 'nms/meter_detail.html')
+
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
         tower = self.create_tower(**data)
