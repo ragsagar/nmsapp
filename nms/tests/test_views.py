@@ -63,6 +63,27 @@ class ViewTest(TestCase):
         self.assertIn('table', response.context_data)
         self.assertIsInstance(response.context_data['table'], TowerTable)
 
+    def test_create_tower_view(self):
+        url = reverse('create_tower')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'nms/tower_form.html')
+        old_count = int(Tower.objects.all().count())
+        data = {'y_coordinate': 100,
+                'grid_x': 200,
+                'water_depth': 201,
+                'x_coordinate': 203,
+                'grid_y': 223,
+                'helideck_height': 233,
+                'name': 'Tower2',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Tower.objects.all().count(), old_count+1)
+        
     def test_well_list(self):
         url = reverse_lazy('well_list')
         response = self.client.get(url)
@@ -95,11 +116,11 @@ class ViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'nms/well_form.html')
-        old_count = Well.objects.all().count()
+        old_count = int(Well.objects.all().count())
         data = dict(name="Well2", slot=Well.SLOTS.one,
                     type=Well.TYPES.water_injector, string=Well.STRINGS.one,
                     max_allowed_flowrate=10, location='UAE', current_zone='Dubai',
-                    xmas_tree='Well', tower=Tower.objects.all()[0])
+                    xmas_tree='Well', tower=Tower.objects.all()[0].pk)
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Well.objects.all().count(), old_count)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Well.objects.all().count(), old_count+1)
