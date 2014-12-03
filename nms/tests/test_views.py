@@ -3,9 +3,9 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from nms.models import Tower, Well, Station, StationStatus, Meter, MeterInfo, String
+from nms.models import Tower, Well, Station, StationStatus, Meter, MeterInfo, String, Mode
 from nms.tables import (TowerTable, WellTable, StationTable, MeterTable,
-                        DailyTable, HourlyTable, IntervalTable)
+                        DailyTable, HourlyTable, IntervalTable, ModeTable)
 
 class ViewTest(TestCase):
     def setUp(self):
@@ -41,6 +41,15 @@ class ViewTest(TestCase):
                                      latestdailytime=timezone.now(),
                                      meter_info=meter_info,
                                      well=well)
+        mode_data = {'modename': u'mode2', 'maxerrors': 45, 'maxtemp': 2,
+                     'stationstatusinterval': 123, 'maxindexmatch': 45,
+                     'minbatt': 34, 'serialport': u'sp1',
+                     'dailydatainterval': 34, 'minrssi': 49,
+                     'intervaldatainterval': 2, 'ticksperpacket': 23,
+                     'packetsperbroadcast': 12, 'hourlydatainterval': 3,
+                     'maxfailedreads': 23}
+        mode = Mode.objects.create(**mode_data)
+
         
     def create_user(self, **kwargs):
         user_data = self.credentials
@@ -102,6 +111,19 @@ class ViewTest(TestCase):
         self.assertIsInstance(response.context_data['hourly_table'], HourlyTable)
         self.assertIsInstance(response.context_data['interval_table'], IntervalTable)
         self.assertTemplateUsed(response, 'nms/meter_detail.html')
+
+    def test_mode_list(self):
+        url = reverse('list_modes')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        modes = Mode.objects.all()
+        self.assertEqual(len(response.context_data['object_list']), modes.count())
+        self.assertTemplateUsed(response, 'nms/mode_list.html')
+        self.assertIsInstance(response.context_data['table'], ModeTable)
+        
 
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
