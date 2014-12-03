@@ -246,6 +246,9 @@ class CreateWellView(LoginRequiredMixin,
                      CreateView):
     """ View to create new wells. """
     model = Well
+    fields = ('name', 'slot', 'type', 'string',
+              'max_allowed_flowrate', 'location',
+              'current_zone', 'xmas_tree', 'tower')
 
 class UpdateWellView(LoginRequiredMixin,
                      StaffuserRequiredMixin,
