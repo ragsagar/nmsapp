@@ -133,6 +133,27 @@ class ViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.context_data['mode'], mode)
         self.assertTemplateUsed(response, 'nms/mode_detail.html')
+
+    def test_create_mode(self):
+        url = reverse('create_mode')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context_data)
+        self.assertTemplateUsed(response, 'nms/mode_form.html')
+        old_count = int(Mode.objects.all().count())
+        data = {'modename': u'mode3', 'maxerrors': 4,
+                'maxtemp': 22, 'stationstatusinterval': 13,
+                'maxindexmatch': 45, 'minbatt': 34,
+                'serialport': u'sp1', 'dailydatainterval': 34,
+                'minrssi': 49, 'intervaldatainterval': 2,
+                'ticksperpacket': 23, 'packetsperbroadcast': 12,
+                'hourlydatainterval': 3, 'maxfailedreads': 23}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Mode.objects.all().count(), old_count+1)
        
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
