@@ -201,6 +201,31 @@ class ViewTest(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Tower.objects.all().count(), old_count+1)
+
+    def test_update_tower_view(self):
+        tower = Tower.objects.all()[0]
+        url = reverse('update_tower', kwargs={'pk': tower.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'nms/tower_form.html')
+        self.assertIn('form', response.context_data)
+        data = {'y_coordinate': 100,
+                'grid_x': 300,
+                'water_depth': 20,
+                'x_coordinate': 203,
+                'grid_y': 200,
+                'helideck_height': 100,
+                'name': 'EditedTower',
+        }
+        response = self.client.post(url, data)
+        self.assertRedirects(response, str(tower.get_absolute_url()))
+        updated_tower = Tower.objects.get(pk=tower.pk)
+        self.assertEqual(updated_tower.name, 'EditedTower')
+        self.assertEqual(updated_tower.grid_y, 200)
+
         
     def test_well_list(self):
         url = reverse_lazy('well_list')
