@@ -123,8 +123,17 @@ class ViewTest(TestCase):
         self.assertEqual(len(response.context_data['object_list']), modes.count())
         self.assertTemplateUsed(response, 'nms/mode_list.html')
         self.assertIsInstance(response.context_data['table'], ModeTable)
-        
 
+    def test_mode_detail(self):
+        mode = Mode.objects.all()[0]
+        url = reverse('mode_detail', kwargs={'pk': mode.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.context_data['mode'], mode)
+        self.assertTemplateUsed(response, 'nms/mode_detail.html')
+       
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
         tower = self.create_tower(**data)
