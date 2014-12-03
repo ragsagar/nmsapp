@@ -3,8 +3,9 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from nms.models import Tower, Well, Station, StationStatus
-from nms.tables import TowerTable, WellTable, StationTable, MeterTable
+from nms.models import Tower, Well, Station, StationStatus, Meter, MeterInfo, String
+from nms.tables import (TowerTable, WellTable, StationTable, MeterTable,
+                        DailyTable, HourlyTable, IntervalTable)
 
 class ViewTest(TestCase):
     def setUp(self):
@@ -25,7 +26,21 @@ class ViewTest(TestCase):
                                                       nmsrealtime=timezone.now(),
                                                       rssi=20, batt=30, temp=90, sn=23,
                                                       tx=30, pe=44, re=23)
-
+        string = String.objects.create(max_allowed_flowrate=20,
+                                       number=String.STRINGS.one,
+                                       well=well)
+        meter_info = MeterInfo.objects.create(tag="Tag1",
+                                              pipeline="Pipeline1",
+                                              service="Service1",
+                                              well=well,
+                                              string=string)
+        meter = Meter.objects.create(stationaddress=station,
+                                     modbusaddress="23",
+                                     latestintervaltime=timezone.now(),
+                                     latesthourlytime=timezone.now(),
+                                     latestdailytime=timezone.now(),
+                                     meter_info=meter_info,
+                                     well=well)
         
     def create_user(self, **kwargs):
         user_data = self.credentials
@@ -82,7 +97,7 @@ class ViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertIn('meter', response.context_data)
-        self.assertIsInstance(response.context_data['meter'], MeterTable)
+        self.assertIsInstance(response.context_data['meter'], Meter)
         self.assertIsInstance(response.context_data['daily_table'], DailyTable)
         self.assertIsInstance(response.context_data['hourly_table'], HourlyTable)
         self.assertIsInstance(response.context_data['interval_table'], IntervalTable)
