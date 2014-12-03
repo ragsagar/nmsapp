@@ -1,9 +1,10 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
-from nms.models import Tower, Well, Station
-from nms.tables import TowerTable, WellTable, StationTable
+from nms.models import Tower, Well, Station, StationStatus
+from nms.tables import TowerTable, WellTable, StationTable, MeterTable
 
 class ViewTest(TestCase):
     def setUp(self):
@@ -18,8 +19,12 @@ class ViewTest(TestCase):
                                    max_allowed_flowrate=10, location='UAE', current_zone='Dubai',
                                    xmas_tree='Valtek', tower=tower)
         station = Station.objects.create(stationaddress=123,
-                                         lateststatustime="2014-12-12 11:40",
+                                         lateststatustime=timezone.now(),
                                          tower=tower)
+        station_status = StationStatus.objects.create(stationaddress=station,
+                                                      nmsrealtime=timezone.now(),
+                                                      rssi=20, batt=30, temp=90, sn=23,
+                                                      tx=30, pe=44, re=23)
 
         
     def create_user(self, **kwargs):
@@ -52,6 +57,21 @@ class ViewTest(TestCase):
         self.assertTemplateUsed(response, 'nms/station_list.html')
         self.assertIn('table', response.context_data)
         self.assertIsInstance(response.context_data['table'], StationTable)
+
+    def test_station_meter_listing(self):
+        station = Station.objects.all()[0]
+        url = reverse('station_meters_list', kwargs={'pk': station.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('station_status', response.context_data)
+        self.assertEqual(response.context_data['station_status'],
+                         station.statuses.latest('nmsrealtime'))
+        self.assertTemplateUsed(response, 'nms/meter_list.html')
+        self.assertIn('table', response.context_data)
+        self.assertIsInstance(response.context_data['table'], MeterTable)
 
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
