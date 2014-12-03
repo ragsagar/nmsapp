@@ -215,6 +215,8 @@ class CreateTowerView(LoginRequiredMixin,
                       CreateView):
     """ View to create new tower. """
     model = Tower
+    fields = ('name', 'x_coordinate', 'y_coordinate',
+              'grid_x', 'grid_y', 'water_depth', 'helideck_height')
 
     
 class UpdateTowerView(LoginRequiredMixin,
