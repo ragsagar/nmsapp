@@ -154,6 +154,30 @@ class ViewTest(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Mode.objects.all().count(), old_count+1)
+
+    def test_update_mode(self):
+        mode = Mode.objects.all()[0]
+        url = reverse('update_mode', kwargs={'pk': mode.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context_data)
+        self.assertTemplateUsed(response, 'nms/mode_form.html')
+        data = {'modename': u'EditedMode', 'maxerrors': 5,
+                'maxtemp': 10, 'stationstatusinterval': 13,
+                'maxindexmatch': 45, 'minbatt': 34,
+                'serialport': u'sp1', 'dailydatainterval': 34,
+                'minrssi': 70, 'intervaldatainterval': 2,
+                'ticksperpacket': 23, 'packetsperbroadcast': 12,
+                'hourlydatainterval': 10, 'maxfailedreads': 23}
+        response = self.client.post(url, data)
+        self.assertRedirects(response, str(mode.get_absolute_url()))
+        updated_mode = Mode.objects.get(pk=mode.pk)
+        self.assertEqual(updated_mode.modename, 'EditedMode')
+        self.assertEqual(updated_mode.maxtemp, 10)
+
        
     def test_tower_detail(self):
         data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
