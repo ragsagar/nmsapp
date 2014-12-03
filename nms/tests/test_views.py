@@ -9,12 +9,14 @@ class ViewTest(TestCase):
         self.client = Client()
         self.user = self.create_user()
 
-    def create_tower(self, xc, yc, gx, gy, wd):
+    def create_tower(self, xc, yc, gx, gy, wd, ht):
         data = {'y_coordinate': yc,
                 'grid_x': gx,
                 'water_depth': wd,
                 'x_coordinate': xc,
-                'grid_y': gy}
+                'grid_y': gy,
+                'helideck_height': ht
+        }
         return Tower.objects.create(**data)
         
 
@@ -35,7 +37,7 @@ class ViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_tower_detail(self):
-        data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50}
+        data = {'xc': 10, 'yc': 20, 'gx': 30, 'gy': 40, 'wd': 50, 'ht': 10}
         tower = self.create_tower(**data)
         url = reverse_lazy('tower_detail', kwargs={'pk': tower.pk})
         response = self.client.get(url)
