@@ -7,7 +7,8 @@ from nms.tables import TowerTable, WellTable
 
 class ViewTest(TestCase):
     def setUp(self):
-        self.credentials = {'username': 'ragsagar', 'password': 'password'}
+        self.credentials = {'username': 'ragsagar',
+                            'password': 'password',}
         self.client = Client()
         self.user = self.create_user()
         data = {'xc': 122, 'yc': 120, 'gx': 230, 'gy': 402, 'wd': 502, 'ht': 101}
@@ -22,6 +23,8 @@ class ViewTest(TestCase):
         user_data = self.credentials
         user_data.update(kwargs)
         user = User.objects.create_user(**user_data)
+        user.is_staff = True
+        user.save()
         return user
 
     def create_tower(self, xc, yc, gx, gy, wd, ht):
@@ -84,3 +87,19 @@ class ViewTest(TestCase):
         self.assertEqual(response.context_data['well'], well)
         self.assertTemplateUsed(response, 'nms/well_detail.html')
 
+    def test_create_well_view(self):
+        url = reverse('create_well')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(**self.credentials)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'nms/well_form.html')
+        old_count = Well.objects.all().count()
+        data = dict(name="Well2", slot=Well.SLOTS.one,
+                    type=Well.TYPES.water_injector, string=Well.STRINGS.one,
+                    max_allowed_flowrate=10, location='UAE', current_zone='Dubai',
+                    xmas_tree='Well', tower=Tower.objects.all()[0])
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Well.objects.all().count(), old_count)
