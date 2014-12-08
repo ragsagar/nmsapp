@@ -14,10 +14,12 @@ Flow Meter Detail
   <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>Meter Info</h4>
+            <div class="panel-title">
+            Meter Info
             {% if user.is_staff %}
-	    <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-primary">Edit</a>
-	    {% endif %}
+        	    <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-default">Edit</a>
+        	{% endif %}
+            </div>
         </div>
         <div class="panel-body">
             <table class="table table-condensed">
