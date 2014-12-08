@@ -119,6 +119,32 @@ class MeterInfoDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'meter_info'
     template_name = 'nms/meter_info_detail.html'
 
+    def get_context_data(self, **kwargs):
+        """
+        if meter is present we are showing the meter detail in
+        the same page.
+        """
+        context_data = super(MeterInfoDetailView, self
+                                    ).get_context_data(**kwargs)
+        config = RequestConfig(self.request)
+        meter = self.object.related_meter
+        if meter:
+            daily_readings = Daily.objects.filter(meter__meters=meter)
+            daily_table = DailyTable(daily_readings, prefix='daily-')
+            config.configure(daily_table)
+            hourly_readings = Hourly.objects.filter(meter__meters=meter)
+            hourly_table = HourlyTable(hourly_readings, prefix='hourly-')
+            config.configure(hourly_table)
+            interval_readings = Reading.objects.filter(meter__meters=meter)
+            interval_table = IntervalTable(interval_readings, prefix='inv-')
+            config.configure(interval_table)
+            context_data.update({'daily_table': daily_table,
+                                 'hourly_table': hourly_table,
+                                 'interval_table': interval_table})
+
+
+        return context_data
+
 
 class CreateModeView(LoginRequiredMixin,
                      StaffuserRequiredMixin,
