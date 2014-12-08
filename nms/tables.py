@@ -54,7 +54,7 @@ class HourlyTable(tables.Table):
 class DailyTable(tables.Table):
     class Meta:
         model = Daily
-        attrs = {'class': 'table table-condensed'}
+        attrs = {'class': 'table table-condensed table-bordered'}
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
                    'field14', 'field15', 'field16', 'created', 'id',
