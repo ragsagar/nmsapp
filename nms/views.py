@@ -1,9 +1,12 @@
+from datetime import timedelta
+from dateutil import rrule
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (DetailView, CreateView, UpdateView, View,
                                   FormView, TemplateView)
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
+from django.utils import timezone
 
 from django_tables2 import SingleTableView, RequestConfig
 from braces.views import (LoginRequiredMixin, StaffuserRequiredMixin,
@@ -78,7 +81,7 @@ class MeterDetailView(LoginRequiredMixin, DetailView):
         hourly_readings = Hourly.objects.filter(meter__meters=meter)
         hourly_table = HourlyTable(hourly_readings, prefix='hourly-')
         config.configure(hourly_table)
-        interval_readings = Reading.objects.filter(meter__meters=meter)
+        interval_readings = Reading.objects.filter(meter__meters=meter).order_by('nmsrealtime')
         interval_table = IntervalTable(interval_readings, prefix='inv-')
         config.configure(interval_table)
         context.update({'daily_table': daily_table,
@@ -397,4 +400,90 @@ class GetStringsJSONView(LoginRequiredMixin,
         else:
             response = []
         return self.render_json_response(response)
+
+class GetDashboardWidgetJOSONView(LoginRequiredMixin,
+                                  JSONResponseMixin,
+                                  View):
+    """ View to returns a json data of reading in the
+    dashboard """
+    def get(self, request):
+        today = timezone.now()
+        yester_day = today.date() - timedelta(days=1)
+        towers = Tower.objects.all()
+        wells = Well.objects.all()
+        todays_reading = Reading.objects.filter(nmsrealtime__year=today.year,
+                                                nmsrealtime__month=today.month,
+                                                nmsrealtime__day=today.day
+                                                ).order_by('-nmsrealtime')
+
+        yesterdays_reading = Reading.objects.filter(
+                                                nmsrealtime__year=yester_day.year,
+                                                nmsrealtime__month=yester_day.month,
+                                                nmsrealtime__day=yester_day.day
+                                                ).order_by('-nmsrealtime')
+        today_total_reading = None
+        yesterdays_total_reading = None
+        if todays_reading:
+            today_total_reading = todays_reading[0].current_day_volume
+        if yesterdays_reading:
+            yesterdays_total_reading = yesterdays_reading[0].current_day_volume
+        # Construction data of volume per date.
+        # looping all meter and find each day reading and taking the last 
+        # value injected.
+        # we are only loop 15 days past to show the days volume chart,
+        meters = MeterInfo.objects.all()
+        meter_chart_data = []
+        thirty_days_past_date = today.date() - timedelta(days=15)
+        labels=['x']
+        for current_date in rrule.rrule(rrule.DAILY, dtstart=thirty_days_past_date, until=today.date()):
+            labels.append(current_date.date())
+        meter_chart_data.append(labels)
+        for meter in meters:
+            data_list = [meter.tag]
+            for current_date in rrule.rrule(rrule.DAILY, dtstart=thirty_days_past_date, until=today.date()):
+                readings = meter.readings.filter(nmsrealtime__day=current_date.day,
+                                                 nmsrealtime__month=current_date.month,
+                                                 nmsrealtime__year=current_date.year).order_by('-nmsrealtime')
+                if readings:
+                    data_list.append(readings[0].current_day_volume)
+            meter_chart_data.append(data_list)
+        # Showing the todays reading in all well.
+        # Looping through all well and aggrigate total reading 
+        # return labls and values we constructon as js expecting.
+        well_chart_data = ['Total Injection Today']
+        well_labels =[]
+        for well in wells:
+            well_labels.append(well.name)
+            well_total_reading = 0
+            for meter in well.meter_infos.all():
+                date = today.date() - timedelta(days=1)
+                todays_reading = meter.readings.filter(nmsrealtime__day=date.day,
+                                                       nmsrealtime__month=date.month,
+                                                       nmsrealtime__year=date.year
+                                                ).order_by('-nmsrealtime')
+                if todays_reading:
+                    well_total_reading += todays_reading[0].current_day_volume
+            well_chart_data.append(well_total_reading)
+        well_data = {
+            'chart_data': well_chart_data,
+            'well_labels': well_labels,
+        }
+
+        response = {
+            'tower_count': towers.count(),
+            'well_cont': wells.count(),
+            'todays_reading': today_total_reading,
+            'yesterdays_total_reading': yesterdays_total_reading,
+            'meter_chart_data': meter_chart_data,
+            'well_chart_data': well_data,
+        }
+
+        return self.render_json_response(response)
+
+# class GetReadingByDaysJSONView(LoginRequiredMixin,
+#                                JSONResponseMixin,
+#                                View):
+#     """ View returs a json data with reading by each data """
+    
+
             
