@@ -455,15 +455,24 @@ class GetDashboardWidgetJOSONView(LoginRequiredMixin,
         for well in wells:
             well_labels.append(well.name)
             well_total_reading = 0
+            well_total_reading_yesterday = 0
             for meter in well.meter_infos.all():
-                date = today.date() - timedelta(days=1)
+                date = today.date()
+                yester_day_date = date - timedelta(days=1)
+                print date, yester_day_date
                 todays_reading = meter.readings.filter(nmsrealtime__day=date.day,
                                                        nmsrealtime__month=date.month,
                                                        nmsrealtime__year=date.year
                                                 ).order_by('-nmsrealtime')
+                yesterdays_reading = meter.readings.filter(nmsrealtime__day=yester_day_date.day,
+                                                           nmsrealtime__month=yester_day_date.month,
+                                                           nmsrealtime__year=yester_day_date.year
+                                                ).order_by('-nmsrealtime')
                 if todays_reading:
                     well_total_reading += todays_reading[0].current_day_volume
-            well_obj_data = [well.name, 0, well_total_reading, 0]
+                if yesterdays_reading:
+                    well_total_reading_yesterday += yesterdays_reading[0].current_day_volume
+            well_obj_data = [well.name, well_total_reading_yesterday, well_total_reading]
             well_chart_data.append(well_obj_data)
         well_data = {
             'chart_data': well_chart_data,
