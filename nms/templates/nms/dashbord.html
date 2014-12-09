@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
+{% load staticfiles %}
 
 {% block sidebar %}
     {% include '_sidebar.html' with dashboardmenu="active" %}
@@ -11,5 +12,94 @@ Dashboard
 
 
 {% block body %}
+<div class="col-md-12">
+    <div class="col-md-8">
+        <div class="panel panel-teal plain">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Total Injection Today - Well
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="total_injection_well"></div>
+            </div>
+        </div>
+        <div class="panel panel-teal plain">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Total Volume Injected Per Day
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="volume_by_date"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-teal">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Towers & Wells
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="shortcut-buttons">
+                    <a href="#" class="shortcut-btn">
+                        <span class="shortcut-icon">
+                            <i class="im-radio"></i><br>
+                            <span class="tower_count">1</span>
+                        </span>
+                        <span class="shortcut-text">Towrs</span>
+                    </a>
+                    <a href="#" class="shortcut-btn">
+                        <span class="shortcut-icon">
+                            <i class="im-location4"></i><br>
+                            <span class="well_count">1</span>
+                        </span>
+                        <span class="shortcut-text">Wells</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-teal">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Volumes
+                </div>
+            </div>
+            <div class="panel-body p0">
+                <div class="instagram-widget">
+                    <div class="gray-bg instagram-widget-header">
+                        <div class="col-md-12">
+                            <div class="col-lg-6 col-md-6 col-xs-6 text-center">
+                                <a href="">
+                                    <p class="instagram-widget-text">Todays</p>
+                                    <strong class="instagram-widget-number todays">0</strong>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-6 text-center">
+                                <a href="">
+                                    <p class="instagram-widget-text">Yesterdays</p>
+                                    <strong class="instagram-widget-number yesterdays">0</strong>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/c3/d3.min.js' %}"></script>
+<script src="{% static 'js/c3/c3.min.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}" ></script>
+<script type="text/javascript">
+urls = {
+    dashboard_detail_url: '{% url "dashboard_detail_json" %}'
+}
+init(urls);
+</script>
 
 {% endblock %}
