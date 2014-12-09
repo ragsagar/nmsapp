@@ -411,22 +411,25 @@ class GetDashboardWidgetJOSONView(LoginRequiredMixin,
         yester_day = today.date() - timedelta(days=1)
         towers = Tower.objects.all()
         wells = Well.objects.all()
-        todays_reading = Reading.objects.filter(nmsrealtime__year=today.year,
-                                                nmsrealtime__month=today.month,
-                                                nmsrealtime__day=today.day
-                                                ).order_by('-nmsrealtime')
+        today_total_reading = 0
+        yesterdays_total_reading = 0
+        for well in wells:
+            todays_reading = Reading.objects.filter(nmsrealtime__year=today.year,
+                                                    nmsrealtime__month=today.month,
+                                                    nmsrealtime__day=today.day,
+                                                    meter__well=well,
+                                                    ).order_by('-nmsrealtime')
 
-        yesterdays_reading = Reading.objects.filter(
-                                                nmsrealtime__year=yester_day.year,
-                                                nmsrealtime__month=yester_day.month,
-                                                nmsrealtime__day=yester_day.day
-                                                ).order_by('-nmsrealtime')
-        today_total_reading = None
-        yesterdays_total_reading = None
-        if todays_reading:
-            today_total_reading = todays_reading[0].current_day_volume
-        if yesterdays_reading:
-            yesterdays_total_reading = yesterdays_reading[0].current_day_volume
+            yesterdays_reading = Reading.objects.filter(
+                                                    nmsrealtime__year=yester_day.year,
+                                                    nmsrealtime__month=yester_day.month,
+                                                    nmsrealtime__day=yester_day.day,
+                                                    meter__well=well,
+                                                    ).order_by('-nmsrealtime')
+            if todays_reading:
+                today_total_reading += todays_reading[0].current_day_volume
+            if yesterdays_reading:
+                yesterdays_total_reading += yesterdays_reading[0].current_day_volume
         # Construction data of volume per date.
         # looping all meter and find each day reading and taking the last 
         # value injected.
