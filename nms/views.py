@@ -450,7 +450,7 @@ class GetDashboardWidgetJOSONView(LoginRequiredMixin,
         # Showing the todays reading in all well.
         # Looping through all well and aggrigate total reading 
         # return labls and values we constructon as js expecting.
-        well_chart_data = ['Total Injection Today']
+        well_chart_data = []
         well_labels =[]
         for well in wells:
             well_labels.append(well.name)
@@ -463,7 +463,8 @@ class GetDashboardWidgetJOSONView(LoginRequiredMixin,
                                                 ).order_by('-nmsrealtime')
                 if todays_reading:
                     well_total_reading += todays_reading[0].current_day_volume
-            well_chart_data.append(well_total_reading)
+            well_obj_data = [well.name, 0, well_total_reading, 0]
+            well_chart_data.append(well_obj_data)
         well_data = {
             'chart_data': well_chart_data,
             'well_labels': well_labels,
