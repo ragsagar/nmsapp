@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
 from django.utils.functional import cached_property
 
@@ -17,6 +18,20 @@ class Tower(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
+
+    def is_active_today(self, date=None):
+        """ Checking Tower is activi today """
+        wells = self.wells.all()
+        today = timezone.now().date()
+        if not date:
+            date = today
+        if wells:
+            for well in wells:
+                if well.is_active_today(date):
+                    return True
+                else:
+                    return False
+        return False
 
     def __unicode__(self):
         return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
@@ -55,10 +70,27 @@ class Well(models.Model):
     location = models.CharField(max_length=255)
     current_zone = models.CharField(max_length=255)
     xmas_tree = models.CharField(max_length=255)
-    tower = models.ForeignKey(Tower, related_name='towers')
+    tower = models.ForeignKey(Tower, related_name='wells')
 
     def get_absolute_url(self):
         return reverse_lazy('well_detail', kwargs={'pk': self.pk})
+
+    def is_active_today(self, date=None):
+        """ Check wether well is activie today """
+        today = timezone.now().date()
+        if not date:
+            date = today
+        meter_infos = self.meter_infos.all()
+        if meter_infos:
+            for meter in meter_infos:
+                if meter.readings.filter(nmsrealtime__day=date.day,
+                                         nmsrealtime__month=date.month,
+                                         nmsrealtime__year=date.year):
+                    return True
+                else:
+                    return False
+        return False
+
 
     def __unicode__(self):
         return u"%s - %s" % (self.location, self.current_zone)
