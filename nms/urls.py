@@ -11,7 +11,7 @@ from .views import (StationListView, MeterListView, MeterDetailView,
                     ControlPanelView, ToggleNMSView, UserListView,
                     CreateUserView, UserDetailView, ChangeMyPasswordView,
                     DashboardView, CreateStringView, GetStringsJSONView,
-                    GetDashboardWidgetJOSONView)
+                    GetDashboardWidgetJOSONView, GetTowerReadingJsonView)
 
 
 urlpatterns = patterns('',
@@ -19,7 +19,10 @@ urlpatterns = patterns('',
             DashboardView.as_view(), name='dashboard'),
         url(r'^dashboard/json$',
             GetDashboardWidgetJOSONView.as_view(),
-            name='dashboard_detail_json'),          
+            name='dashboard_detail_json'),
+        url(r'^dashboard/tower/(?P<pk>\d+)/json$',
+            GetTowerReadingJsonView.as_view(),
+            name='dashboard_tower_detail_json'),           
         url(r'^stations/$',
             StationListView.as_view(), name='list_stations'),
         url(r'^stations/(?P<pk>\d+)/meters/$',

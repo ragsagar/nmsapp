@@ -24,6 +24,15 @@ from .forms import CreateUserForm, WellForm
 class DashboardView(LoginRequiredMixin, TemplateView):
     """ View to render a dashbord template. """
     template_name = 'nms/dashbord.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Passing the extra context data.
+        """
+        context_data = super(DashboardView, self).get_context_data(**kwargs)
+        towers = Tower.objects.all()
+        context_data['towers'] = towers
+        return context_data
     
 
 class StationListView(LoginRequiredMixin, SingleTableView):
@@ -491,6 +500,34 @@ class GetDashboardWidgetJOSONView(LoginRequiredMixin,
             'well_chart_data': well_data,
         }
 
+        return self.render_json_response(response)
+
+class GetTowerReadingJsonView(LoginRequiredMixin,
+                              JSONResponseMixin,
+                              View):
+    """ View to return a json response of all reading """
+    def get(self, request, *args, **kwargs):
+        tower = get_object_or_404(Tower, pk=self.kwargs.get('pk'))
+        response = {}
+        today = timezone.now().date()
+        date = today - timedelta(days=20)
+        day_past_seven_days = date - timedelta(days=7)
+        data_list = []
+        for current_date in rrule.rrule(rrule.DAILY, dtstart=day_past_seven_days, until=date):
+            well_total_volume = 0
+            for well in tower.wells.all():
+                meter_total_volume = 0
+                for meter in well.meter_infos.all():
+                    readings = meter.readings.filter(nmsrealtime__day=current_date.day,
+                                                     nmsrealtime__month=current_date.month,
+                                                     nmsrealtime__year=current_date.year
+                                                     ).order_by('nmsrealtime')
+                    if readings:
+                        meter_total_volume += readings[0].current_day_volume
+                well_total_volume += meter_total_volume
+            data = [current_date, well_total_volume]
+            data_list.append(data)
+        response['data'] = data_list
         return self.render_json_response(response)
 
 # class GetReadingByDaysJSONView(LoginRequiredMixin,
