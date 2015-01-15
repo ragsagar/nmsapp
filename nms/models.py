@@ -230,7 +230,7 @@ class Mode(models.Model):
 
 
 class Daily(models.Model):   
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     meterrealtime = models.DateTimeField()
     stationaddress = models.ForeignKey(Station, related_name='daily_readings')
     modbusaddress = models.IntegerField()
@@ -241,12 +241,12 @@ class Daily(models.Model):
     index = models.IntegerField()
     realdate = models.FloatField()
     realtime = models.FloatField()
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     volume = models.FloatField()
     flowtime = models.FloatField()
-    staticpressurea= models.FloatField()
-    differentialpressure = models.FloatField()
+    staticpressurea= models.FloatField(verbose_name='Static Pressure')
+    differentialpressure = models.FloatField(verbose_name='Differential Pressure')
     corrpipesize = models.FloatField()
     corrplatesize = models.FloatField()
     platesize = models.FloatField()
@@ -259,7 +259,7 @@ class Daily(models.Model):
 
 
 class Hourly(models.Model):
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     meterrealtime = models.DateTimeField()
     #stationaddress = models.IntegerField()
     #modbusid = models.IntegerField()
@@ -270,12 +270,12 @@ class Hourly(models.Model):
     index = models.IntegerField()
     realdate = models.FloatField()
     realtime = models.FloatField()
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     volume = models.FloatField()
     flowtime = models.FloatField()
-    staticpressurea= models.FloatField()
-    differentialpressure = models.FloatField()
+    staticpressurea= models.FloatField(verbose_name='Static Pressure')
+    differentialpressure = models.FloatField(verbose_name='Differential Pressure')
     corrpipesize = models.FloatField()
     corrplatesize = models.FloatField()
     platesize = models.FloatField()
@@ -289,7 +289,7 @@ class Hourly(models.Model):
 
 
 class Reading(models.Model):
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     #modbusid = models.IntegerField()
     stationaddress = models.ForeignKey(Station, related_name='readings')
     modbusaddress = models.IntegerField()
