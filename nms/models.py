@@ -98,7 +98,7 @@ class Well(models.Model):
     
 class Station(models.Model):
     stationaddress = models.IntegerField(primary_key=True,
-                                         verbose_name='Station Address')
+                                         verbose_name='Radio Address')
     lateststatustime = models.DateTimeField(verbose_name='Latest Status Time')
     tower = models.ForeignKey(Tower, null=True, related_name='stations')
 
@@ -174,7 +174,7 @@ class MeterInfo(models.Model):
 
 class Meter(models.Model):
     stationaddress = models.ForeignKey(Station, related_name='meters',
-                                       verbose_name='Station Address')
+                                       verbose_name='Radio Address')
     modbusaddress = models.IntegerField(verbose_name='Modbus Address')
     latestintervaltime = models.DateTimeField()
     latesthourlytime = models.DateTimeField()
