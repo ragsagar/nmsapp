@@ -295,7 +295,7 @@ class Reading(models.Model):
     modbusaddress = models.IntegerField()
     meter = models.ForeignKey(MeterInfo, related_name='readings')
     mode = models.ForeignKey(Mode, related_name='readings') 
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     current_day_volume = models.FloatField()
     static_pressure = models.FloatField()
