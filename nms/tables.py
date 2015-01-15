@@ -38,7 +38,8 @@ class IntervalTable(tables.Table):
         attrs = {'class': 'table table-condensed table-bordered'}
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
-                   'field14', 'field15', 'field16', 'created', 'id')
+                   'field14', 'field15', 'field16', 'created', 'id',
+                   'realdate', 'realtime',)
 
 
 class HourlyTable(tables.Table):
@@ -48,7 +49,7 @@ class HourlyTable(tables.Table):
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'id', 'field14', 'field15', 'field16',
                    'created', 'index', 'realdate', 'realtime',
-                   'meterrealtime')
+                   'meterrealtime', 'staticpressureg')
 
 
 class DailyTable(tables.Table):
@@ -58,7 +59,7 @@ class DailyTable(tables.Table):
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
                    'field14', 'field15', 'field16', 'created', 'id',
-                   'realdate', 'realtime')
+                   'realdate', 'realtime', 'staticpressureg')
 
 
 class LogTable(tables.Table):
