@@ -1,15 +1,35 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
 
+{% block sidebar %}
+    {% include '_sidebar.html' with radiomenu="active" %}
+{% endblock %}
+
+{% block page_title %}
+Meter Detail
+{% endblock %}
+
 {% block body %}
 <div class="row">
   <div class="col-md-12">
     <table class="table table-condensed">
       <tbody>
-	<tr><td>ModBus Address</td><td>{{ meter.modbusaddress }}</td></tr>
-	<tr><td>Tag</td><td>{{ meter.meter_info.tag }}</td></tr>
-	<tr><td>Service</td><td>{{ meter.meter_info.service }}</td></tr>
-	<tr><td>Pipeline</td><td>{{ meter.meter_info.pipeline }}</td></tr>
+        <tr>
+          <th>ModBus Address</th>
+          <th>Tag</th>
+          <th>Service</th>
+          <th>Pipeline</th>
+        </tr>
+        <tr>
+          <td>{{ meter.modbusaddress }}</td>
+          <td>{{ meter.meter_info.tag }}</td>
+          <td>{{ meter.meter_info.service }}</td>
+          <td>{{ meter.meter_info.pipeline }}</td>
+        </tr>
+      	<!-- <tr><td>ModBus Address</td><td>{{ meter.modbusaddress }}</td></tr>
+      	<tr><td>Tag</td><td>{{ meter.meter_info.tag }}</td></tr>
+      	<tr><td>Service</td><td>{{ meter.meter_info.service }}</td></tr>
+      	<tr><td>Pipeline</td><td>{{ meter.meter_info.pipeline }}</td></tr> -->
       </tbody>
     </table>
   </div>
