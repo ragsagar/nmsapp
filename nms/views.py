@@ -510,10 +510,10 @@ class GetTowerReadingJsonView(LoginRequiredMixin,
         tower = get_object_or_404(Tower, pk=self.kwargs.get('pk'))
         response = {}
         today = timezone.now().date()
-        date = today - timedelta(days=20)
-        day_past_seven_days = date - timedelta(days=7)
+        # date = today - timedelta(days=20)
+        day_past_seven_days = today - timedelta(days=7)
         data_list = []
-        for current_date in rrule.rrule(rrule.DAILY, dtstart=day_past_seven_days, until=date):
+        for current_date in rrule.rrule(rrule.DAILY, dtstart=day_past_seven_days, until=today):
             well_total_volume = 0
             for well in tower.wells.all():
                 meter_total_volume = 0

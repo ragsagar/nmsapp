@@ -163,26 +163,43 @@ urls = {
 //     3: [ [1, 3], [2, 14.01], [3.5, 3.14] ],
 // }
 
-// $('.chart_id').each(function(index) {
-//     var options = {
-//         lines: { show: true },
-//         points: { show: true }
-//     }
-//     var tower_id = $(this).data('tower')
-//     var tower_url = $(this).data('url')
-//     $.getJSON(tower_url, function(data) {
-//         var list = data.data
-//         var new_list = []
-//         for(var i=0;i<list.length; i++) {
-//             var timestamp = new Date(list[i][0]).getTime()
-//             console.log(list[i])
-//             new_list.push([timestamp, list[i][1]])
-//         }
-//         console.log(new_list)
-//         $.plot($(this), [new_list])
-//     })
-// })
-init();
+$('.chart_id').each(function() {
+    var tower_url = $(this).data('url');
+    var data = []
+    var chart_div = $(this)
+    $.getJSON(tower_url, function(data) {
+        data = [ [0,0], [2,13], [3,65], [4,20]]
+        $.plot(chart_div, [data])
+    })
+    
+})
+
+$('.chart_id').each(function(index) {
+    var options = {
+        lines: { show: true },
+        points: { show: true }
+    }
+    var tower_id = $(this).data('tower')
+    var tower_url = $(this).data('url')
+    var chart_div = $(this);
+    $.getJSON(tower_url, function(data) {
+        var options = {
+            lines: { show: true },
+            points: { show: true },
+            xaxis: {mode: 'time', timeformat:"%m/%d"},
+        }
+        var list = data.data
+        var new_list = []
+        for(var i=0;i<list.length; i++) {
+            var timestamp = new Date(list[i][0]).getTime()
+            new_list.push([timestamp, list[i][1]])
+        }
+        console.log(new_list)
+        $.plot(chart_div, [ new_list ], options)
+        // $.plot($(this), [new_list])
+    })
+})
+// init();
 
 
 
