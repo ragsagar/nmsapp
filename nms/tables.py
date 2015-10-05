@@ -16,7 +16,7 @@ class StationTable(tables.Table):
 
     class Meta:
         model = Station
-        attrs = {'class': "table table-bordered table_condensed rowlink",
+        attrs = {'class': "table table-bordered table-hover table_condensed rowlink",
                  'data-link': 'row'}
         per_page = 10
 
@@ -31,44 +31,45 @@ class MeterTable(tables.Table):
 
     class Meta:
         model = Meter
-        fields = ('id', 'stationaddress', 'modbusaddress')
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        fields = ('id', 'modbusaddress')
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
 
 class IntervalTable(tables.Table):
     class Meta:
         model = Reading
-        attrs = {'class': 'table table-condensed table-bordered'}
+        attrs = {'class': 'table table-condensed table-hover table-bordered'}
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
-                   'field14', 'field15', 'field16', 'created', 'id')
+                   'field14', 'field15', 'field16', 'created', 'id',
+                   'realdate', 'realtime',)
 
 
 class HourlyTable(tables.Table):
     class Meta:
         model = Hourly
-        attrs = {'class': 'table table-condensed table-bordered'}
+        attrs = {'class': 'table table-condensed table-hover table-bordered'}
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'id', 'field14', 'field15', 'field16',
                    'created', 'index', 'realdate', 'realtime',
-                   'meterrealtime')
+                   'meterrealtime', 'staticpressureg')
 
 
 class DailyTable(tables.Table):
     class Meta:
         model = Daily
-        attrs = {'class': 'table table-condensed'}
+        attrs = {'class': 'table table-condensed table-hover table-bordered'}
         exclude = ('stationaddress', 'modbusaddress',
                    'meter', 'mode', 'meterrealtime', 'index',
                    'field14', 'field15', 'field16', 'created', 'id',
-                   'realdate', 'realtime')
+                   'realdate', 'realtime', 'staticpressureg')
 
 
 class LogTable(tables.Table):
     class Meta:
         model = Log
-        attrs = {'class': 'table table-condensed table-bordered'}
+        attrs = {'class': 'table table-condensed table-hover table-bordered'}
 
 
 class ModeTable(tables.Table):
@@ -79,7 +80,7 @@ class ModeTable(tables.Table):
         model = Mode
         fields = ('modename', 'serialport', 'ticksperpacket',
                   'packetsperbroadcast', 'minbatt', 'maxtemp')
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
 
@@ -97,7 +98,7 @@ class MeterInfoTable(tables.Table):
 
     class Meta:
         model = MeterInfo
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
 
@@ -106,7 +107,7 @@ class TowerTable(tables.Table):
                            args=[tables.utils.A('pk')])
     class Meta:
         model = Tower
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
 
@@ -115,7 +116,7 @@ class WellTable(tables.Table):
                            args=[tables.utils.A('pk')])
     class Meta:
         model = Well
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
         
@@ -127,7 +128,7 @@ class UserTable(tables.Table):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
                   'is_staff', 'is_active', 'date_joined')
-        attrs = {'class': "table table-condensed table-bordered rowlink",
+        attrs = {'class': "table table-condensed table-hover table-bordered rowlink",
                  'data-link': 'row'}
 
 

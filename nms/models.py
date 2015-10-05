@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
 from django.utils.functional import cached_property
 
@@ -17,6 +18,20 @@ class Tower(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('tower_detail', kwargs={'pk': self.pk})
+
+    def is_active_today(self, date=None):
+        """ Checking Tower is activi today """
+        wells = self.wells.all()
+        today = timezone.now().date()
+        if not date:
+            date = today
+        if wells:
+            for well in wells:
+                if well.is_active_today(date):
+                    return True
+                else:
+                    return False
+        return False
 
     def __unicode__(self):
         return u"%s - %s" % (self.x_coordinate, self.y_coordinate)
@@ -55,10 +70,27 @@ class Well(models.Model):
     location = models.CharField(max_length=255)
     current_zone = models.CharField(max_length=255)
     xmas_tree = models.CharField(max_length=255)
-    tower = models.ForeignKey(Tower, related_name='towers')
+    tower = models.ForeignKey(Tower, related_name='wells')
 
     def get_absolute_url(self):
         return reverse_lazy('well_detail', kwargs={'pk': self.pk})
+
+    def is_active_today(self, date=None):
+        """ Check wether well is activie today """
+        today = timezone.now().date()
+        if not date:
+            date = today
+        meter_infos = self.meter_infos.all()
+        if meter_infos:
+            for meter in meter_infos:
+                if meter.readings.filter(nmsrealtime__day=date.day,
+                                         nmsrealtime__month=date.month,
+                                         nmsrealtime__year=date.year):
+                    return True
+                else:
+                    return False
+        return False
+
 
     def __unicode__(self):
         return u"%s - %s" % (self.location, self.current_zone)
@@ -66,7 +98,7 @@ class Well(models.Model):
     
 class Station(models.Model):
     stationaddress = models.IntegerField(primary_key=True,
-                                         verbose_name='Station Address')
+                                         verbose_name='Radio Address')
     lateststatustime = models.DateTimeField(verbose_name='Latest Status Time')
     tower = models.ForeignKey(Tower, null=True, related_name='stations')
 
@@ -147,7 +179,7 @@ class MeterInfo(models.Model):
 
 class Meter(models.Model):
     stationaddress = models.ForeignKey(Station, related_name='meters',
-                                       verbose_name='Station Address')
+                                       verbose_name='Radio Address')
     modbusaddress = models.IntegerField(verbose_name='Modbus Address')
     latestintervaltime = models.DateTimeField()
     latesthourlytime = models.DateTimeField()
@@ -203,7 +235,7 @@ class Mode(models.Model):
 
 
 class Daily(models.Model):   
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     meterrealtime = models.DateTimeField()
     stationaddress = models.ForeignKey(Station, related_name='daily_readings')
     modbusaddress = models.IntegerField()
@@ -214,12 +246,12 @@ class Daily(models.Model):
     index = models.IntegerField()
     realdate = models.FloatField()
     realtime = models.FloatField()
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     volume = models.FloatField()
     flowtime = models.FloatField()
-    staticpressurea= models.FloatField()
-    differentialpressure = models.FloatField()
+    staticpressurea= models.FloatField(verbose_name='Static Pressure')
+    differentialpressure = models.FloatField(verbose_name='Differential Pressure')
     corrpipesize = models.FloatField()
     corrplatesize = models.FloatField()
     platesize = models.FloatField()
@@ -232,7 +264,7 @@ class Daily(models.Model):
 
 
 class Hourly(models.Model):
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     meterrealtime = models.DateTimeField()
     #stationaddress = models.IntegerField()
     #modbusid = models.IntegerField()
@@ -243,12 +275,12 @@ class Hourly(models.Model):
     index = models.IntegerField()
     realdate = models.FloatField()
     realtime = models.FloatField()
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     volume = models.FloatField()
     flowtime = models.FloatField()
-    staticpressurea= models.FloatField()
-    differentialpressure = models.FloatField()
+    staticpressurea= models.FloatField(verbose_name='Static Pressure')
+    differentialpressure = models.FloatField(verbose_name='Differential Pressure')
     corrpipesize = models.FloatField()
     corrplatesize = models.FloatField()
     platesize = models.FloatField()
@@ -262,13 +294,13 @@ class Hourly(models.Model):
 
 
 class Reading(models.Model):
-    nmsrealtime = models.DateTimeField()
+    nmsrealtime = models.DateTimeField(verbose_name='Real Time')
     #modbusid = models.IntegerField()
     stationaddress = models.ForeignKey(Station, related_name='readings')
     modbusaddress = models.IntegerField()
     meter = models.ForeignKey(MeterInfo, related_name='readings')
     mode = models.ForeignKey(Mode, related_name='readings') 
-    grandtotal = models.FloatField()
+    grandtotal = models.FloatField(verbose_name='Grand Total')
     flowrate = models.FloatField()
     current_day_volume = models.FloatField()
     static_pressure = models.FloatField()

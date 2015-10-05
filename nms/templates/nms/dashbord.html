@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
+{% load staticfiles %}
 
 {% block sidebar %}
     {% include '_sidebar.html' with dashboardmenu="active" %}
@@ -11,5 +12,197 @@ Dashboard
 
 
 {% block body %}
+<div class="col-md-12">
+    <div class="col-md-8">
+        {% for tower in towers %}
+            <div class="col-md-12">
+                <div class="panel panel-teal plain">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            {{tower.name}} - ( {{tower}} )
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-3">
+                            <div class="col-md-12">
+                                <div class="tower-thumb">
+                                    <img src="{% static 'images/tower.png' %}" width="100" alt="">
+                                    {% if tower.is_active_today %}
+                                    <div class="tower-status active">
+                                    </div>
+                                    {% else %}
+                                    <div class="tower-status deactive">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <br>
+                                <div class="easy-pie-chart-blue" data-percent="65">Volume</div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="chart_id" data-tower="{{tower.id}}" style="width:400px;height:300px" data-url="{% url 'dashboard_tower_detail_json' pk=tower.pk %}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- <div class="panel panel-teal plain">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Total Injection Today
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="total_injection_well"></div>
+            </div>
+        </div> -->
+        <!-- <div class="panel panel-teal plain">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Total Volume Injected Per Day
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="volume_by_date"></div>
+            </div>
+        </div> -->
+
+        <!-- <div class="panel panel-teal plain">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Total Volume Injected Per Day
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="area_chart"></div>
+            </div>
+        </div> -->
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-teal">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Towers & Wells
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="shortcut-buttons">
+                    <a href="#" class="shortcut-btn">
+                        <span class="shortcut-icon">
+                            <i class="im-radio"></i><br>
+                            <span class="tower_count">1</span>
+                        </span>
+                        <span class="shortcut-text">Towrs</span>
+                    </a>
+                    <a href="#" class="shortcut-btn">
+                        <span class="shortcut-icon">
+                            <i class="im-location4"></i><br>
+                            <span class="well_count">1</span>
+                        </span>
+                        <span class="shortcut-text">Wells</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-teal">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Volumes
+                </div>
+            </div>
+            <div class="panel-body p0">
+                <div class="instagram-widget">
+                    <div class="gray-bg instagram-widget-header">
+                        <div class="col-md-12">
+                            <div class="col-lg-6 col-md-6 col-xs-6 text-center">
+                                <a href="">
+                                    <p class="instagram-widget-text">Todays</p>
+                                    <strong class="instagram-widget-number todays">0</strong>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-6 text-center">
+                                <a href="">
+                                    <p class="instagram-widget-text">Yesterdays</p>
+                                    <strong class="instagram-widget-number yesterdays">0</strong>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.custom.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.time.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.growraf.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.categories.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.orderBars.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/pie-chart/jquery.easy-pie-chart.js' %}"></script>
+<script src="{% static 'new_theme/plugins/charts/flot/date.js' %}"></script>
+<script src="{% static 'js/c3/c3.min.js' %}"></script>
+<script src="{% static 'js/c3/c3.min.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}" ></script>
+<script type="text/javascript">
+urls = {
+    dashboard_detail_url: '{% url "dashboard_detail_json" %}',
+}
+
+
+// var data_dict = {
+//     2: [ [0, 0], [1, 1] ],
+//     1: [ [0,0], [2,13], [3,65], [4,20]],
+//     3: [ [1, 3], [2, 14.01], [3.5, 3.14] ],
+// }
+
+$('.chart_id').each(function() {
+    var tower_url = $(this).data('url');
+    var data = []
+    var chart_div = $(this)
+    $.getJSON(tower_url, function(data) {
+        data = [ [0,0], [2,13], [3,65], [4,20]]
+        $.plot(chart_div, [data])
+    })
+    
+})
+
+$('.chart_id').each(function(index) {
+    var options = {
+        lines: { show: true },
+        points: { show: true }
+    }
+    var tower_id = $(this).data('tower')
+    var tower_url = $(this).data('url')
+    var chart_div = $(this);
+    $.getJSON(tower_url, function(data) {
+        var options = {
+            lines: { show: true },
+            points: { show: true },
+            xaxis: {mode: 'time', timeformat:"%m/%d"},
+        }
+        var list = data.data
+        var new_list = []
+        for(var i=0;i<list.length; i++) {
+            var timestamp = new Date(list[i][0]).getTime()
+            new_list.push([timestamp, list[i][1]])
+        }
+        console.log(new_list)
+        $.plot(chart_div, [ new_list ], options)
+        // $.plot($(this), [new_list])
+    })
+})
+// init();
+
+
+
+</script>
 
 {% endblock %}

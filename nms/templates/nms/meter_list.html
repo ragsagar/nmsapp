@@ -10,16 +10,48 @@ Meter List
 {% endblock %}
 
 {% block body %}
+<style type="text/css">
+	#battery {
+		position: relative;
+		right: 26px;
+		top: 1px;
+	}
+	span#signal {
+		position: relative;
+		bottom: 7px;
+	}
+</style>
 <div class="row">
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-12">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <h5>Station Status</h5>
+	    <h5>Radio {{ station_status.stationaddress }} Status
+	    	<span class="pull-right">
+		    	<span id="battery"></span> 
+		    	<span id="signal"></span>
+		    </span>
+	    </h5>
 	  </div>
 	  <div class="panel-body">
-	    <table class="table table-condensed">
+	  	<table class="table table-condensed table-bordered">
+	  		<tr>
+	  			<th>Temprature</th>
+	  			<th>SN</th>
+	  			<th>TX</th>
+	  			<th>PE</th>
+	  			<th>RE</th>
+	  		</tr>
+	  		<tr>
+	  			<td>{{ station_status.temp }}</td>
+	  			<td>{{ station_status.sn }}</td>
+	  			<td>{{ station_status.tx }}</td>
+	  			<td>{{ station_status.pe }}</td>
+	  			<td>{{ station_status.re }}</td>
+	  		</tr>
+	  	</table>
+	    <!-- <table class="table table-condensed">
 	      <tbody>
 		<tr>
 		  <td>Station Address</td>
@@ -54,7 +86,7 @@ Meter List
 		  <td>{{ station_status.re }}</td>
 		</tr>
 	      </tbody>
-	    </table>
+	    </table> -->
 	  </div>
 	</div>
       </div>
@@ -73,4 +105,101 @@ Meter List
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+var generate_battery_svg = function(batt)
+    {
+        var power = '0%';
+        var color = 'red';
+
+        var svg_start = '<svg id="barsSVG" style="enable-background:new 0 0 52 32" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" height="20px" width="25px" version="1.1" y="0px" x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 52 32"><g fill="#5D5D5D"><rect x="1" y="0" height="70%" width="88%" fill="#fff" stroke="#CCCCCC" stroke-width="3" /><rect x="48" y="6" height="10" width="20"/>';
+        var svg_end = '</g></svg>'
+
+        if(batt != null && batt != undefined)
+        {
+            var batt = parseInt(batt)
+            if(1 <= batt && batt <= 50)
+            {
+                batt = ((batt/70)*100).toFixed(2)
+                power = batt + '%';
+                color = 'red';
+            }
+             if(batt >= 51)
+            {
+                if(batt >= 70)
+                {
+                    batt = 70
+                }
+                else
+                {
+                    batt = ((batt/70)*100).toFixed(2)
+                }
+                power = batt + '%';
+                color = 'green';
+            }
+
+        }
+
+        var rect = '<rect x="5" y="5" height="40%" width="'+ power +'" fill="'+ color +'"/>'
+
+        var result = svg_start + rect + svg_end;
+        return result;
+
+
+    }
+
+    var generate_strength_svg = function(rssi)
+    {
+        var fill1 = '#CCCCCC';
+        var fill2 = '#CCCCCC';
+        var fill3 = '#CCCCCC';
+        var fill4 = '#CCCCCC';
+
+
+        if(rssi != null && rssi != undefined)
+        {
+            var rssi = parseInt(rssi)
+            if(1 <= rssi && rssi <= 25)
+            {
+                fill4 = '#666666';
+            }
+            if(26 <= rssi && rssi <= 50)
+            {
+                fill3 = '#666666';
+                fill4 = '#666666';
+            }
+            if(51 <= rssi && rssi <= 75)
+            {
+                fill2 = '#666666';
+                fill3 = '#666666';
+                fill4 = '#666666';
+            }
+            if(rssi >= 76)
+            {
+                fill1 = '#666666';
+                fill2 = '#666666';
+                fill3 = '#666666';
+                fill4 = '#666666';
+            }
+
+        }
+
+        var svg_start = '<svg id="barsSVG" style="enable-background:new 0 0 28 32" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" height="15px" width="15px" version="1.1" y="0px" x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 28 32"><g fill="#010101">';
+        var rect1 = '<rect x="24" height="32" width="4" fill="'+ fill1 +'"/>'
+        var rect2 = '<rect height="24" width="4" y="8" x="16" fill="'+ fill2 +'"/>'
+        var rect3 = '<rect height="16" width="4" y="16" x="8" fill="'+ fill3 +'"/>'
+        var rect4 = '<rect y="24" width="4" height="8" fill="'+ fill4 +'"/>'
+        var svg_end = '</g></svg>'
+
+        var result = svg_start + rect1 + rect2 + rect3 + rect4 + svg_end;
+
+        return result;
+
+    }
+$('#battery').html(generate_battery_svg({{ station_status.batt }})).attr('title', 'Battery: {{ station_status.batt }}')
+$('#signal').html(generate_strength_svg({{station_status.rssi}})).attr('title', 'Signal: {{ station_status.rssi }}')
+</script>
 {% endblock %}

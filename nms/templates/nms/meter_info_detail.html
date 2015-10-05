@@ -14,10 +14,12 @@ Flow Meter Detail
   <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>Meter Info</h4>
+            <div class="panel-title">
+            Meter Info
             {% if user.is_staff %}
-	    <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-primary">Edit</a>
-	    {% endif %}
+        	    <a href="{% url 'update_meter_info' meter_info.pk %}" class="btn btn-sm btn-default">Edit</a>
+        	{% endif %}
+            </div>
         </div>
         <div class="panel-body">
             <table class="table table-condensed">
@@ -43,6 +45,49 @@ Flow Meter Detail
             </table>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="btn-group btn-group-justified">
+            <a href="#daily" class="btn btn-default" role="button">Daily</a>
+            <a href="#hourly" class="btn btn-default">Hourly</a>
+            <a href="#interval" class="btn btn-default">Interval</a>
+        </div>
+    </div>
+    {% if daily_table %}
+    <div class="panel panel-default" name="daily" id="daily">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Daily
+            </div>
+        </div>
+        <div class="panel-body table-responsive">
+            {% render_table daily_table %}
+        </div>
+    </div>
+    {% endif %}
+    {% if hourly_table %}
+    <div class="panel panel-default" name="hourly" id="hourly">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Hourly
+            </div>
+        </div>
+        <div class="panel-body table-responsive">
+            {% render_table hourly_table %}
+        </div>
+    </div>
+    {% endif %}
+    {% if interval_table %}
+    <div class="panel panel-default" name="interval" id="interval">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Interval
+            </div>
+        </div>
+        <div class="panel-body table-responsive">
+            {% render_table interval_table %}
+        </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
