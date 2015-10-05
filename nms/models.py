@@ -70,6 +70,11 @@ class Station(models.Model):
     lateststatustime = models.DateTimeField(verbose_name='Latest Status Time')
     tower = models.ForeignKey(Tower, null=True, related_name='stations')
 
+    @cached_property
+    def latest_status(self):
+        latest_status = self.statuses.all().order_by('-nmsrealtime').first()
+        return latest_status
+
     def __unicode__(self):
         return u"%s" % self.stationaddress
 
