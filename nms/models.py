@@ -263,7 +263,13 @@ class Daily(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def flowrate_in_barrels(self):
-        return ((self.flowrate / 1000) / 5.614583) * 86400
+        return round(((self.flowrate * 1000) / 5.614583) * 86400, 2)
+    
+    def grandtotal_in_barrels(self):
+        return round((self.grandtotal * 1000) / 5.614583, 2)
+
+    def volume_in_barrels(self):
+        return round((self.volume * 1000) / 5.614583, 2)
 
 
 class Hourly(models.Model):
@@ -295,7 +301,13 @@ class Hourly(models.Model):
     created = models.DateTimeField(auto_now_add=True) # this will be autopopulated with current machine time
     
     def flowrate_in_barrels(self):
-        return ((self.flowrate / 1000) / 5.614583) * 86400
+        return round(((self.flowrate * 1000) / 5.614583) * 86400, 2)
+    
+    def grandtotal_in_barrels(self):
+        return round((self.grandtotal * 1000) / 5.614583, 2)
+
+    def volume_in_barrels(self):
+        return round((self.volume * 1000) / 5.614583, 2)
 
 class Reading(models.Model):
     nmsrealtime = models.DateTimeField(verbose_name='Real Time')
@@ -315,8 +327,13 @@ class Reading(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def flowrate_in_barrels(self):
-        return ((self.flowrate / 1000) / 5.614583) * 86400
+        return round(((self.flowrate * 1000) / 5.614583) * 86400, 2)
     
+    def grandtotal_in_barrels(self):
+        return round((self.grandtotal * 1000) / 5.614583, 2)
+
+    def volume_in_barrels(self):
+        return round((self.volume * 1000) / 5.614583, 2)
 
 class Log(models.Model):
     nmsrealtime = models.DateTimeField()
