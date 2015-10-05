@@ -10,6 +10,10 @@ class StationTable(tables.Table):
     stationaddress = tables.LinkColumn('station_meters_list',
                                        args=[tables.utils.A('pk')],
                                        )
+    rssi = tables.Column(accessor="latest_status.rssi")
+    batt = tables.Column(accessor="latest_status.batt")
+    temp = tables.Column(accessor="latest_status.temp")
+
     class Meta:
         model = Station
         attrs = {'class': "table table-bordered table_condensed rowlink",
@@ -88,6 +92,9 @@ class MeterInfoTable(tables.Table):
     # table
     well = tables.Column(visible=False)
     well1 = tables.Column(accessor='well')
+    modbus_address = tables.Column(accessor="related_meter.modbusaddress")
+    station_address = tables.Column(accessor="related_meter.stationaddress")
+
     class Meta:
         model = MeterInfo
         attrs = {'class': "table table-condensed table-bordered rowlink",
