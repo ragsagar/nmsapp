@@ -225,7 +225,7 @@ class UpdateModeView(LoginRequiredMixin,
                             kwargs={'pk': self.kwargs.get('pk')})
 
 
-class TowerListView(LoginRequiredMixin, SingleTableView):
+class TowerListView(LoginRequiredMixin, StaffuserRequiredMixin, SingleTableView):
     """ View to list all towers. """
     model = Tower
     table_class = TowerTable
@@ -233,7 +233,7 @@ class TowerListView(LoginRequiredMixin, SingleTableView):
     context_object_name = 'tower'
 
 
-class TowerDetailView(LoginRequiredMixin, SingleTableView):
+class TowerDetailView(LoginRequiredMixin, StaffuserRequiredMixin, SingleTableView):
     """ View to show the detail page and table of related metes. """
     model = Well
     table_class = WellTable
@@ -264,7 +264,7 @@ class UpdateTowerView(LoginRequiredMixin,
     model = Tower
 
     
-class WellListView(LoginRequiredMixin, SingleTableView):
+class WellListView(LoginRequiredMixin, StaffuserRequiredMixin, SingleTableView):
     """ View to list all wells. """
     model = Well
     table_class = WellTable
@@ -272,7 +272,7 @@ class WellListView(LoginRequiredMixin, SingleTableView):
     context_object_name = 'well'
 
 
-class WellDetailView(LoginRequiredMixin, DetailView):
+class WellDetailView(LoginRequiredMixin, StaffuserRequiredMixin, DetailView):
     """ View to show the well detail page """
     model = Well
     template_name = 'nms/well_detail.html'
