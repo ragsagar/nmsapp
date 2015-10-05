@@ -37,7 +37,7 @@ class MeterTable(tables.Table):
 
 
 class IntervalTable(tables.Table):
-    flowrate = tables.Column("Flowrate (Barrels)", accessor="flowrate_in_barrels")
+    flowrate = tables.Column("Flowrate (bbl/d)", accessor="flowrate_in_barrels")
     class Meta:
         model = Reading
         attrs = {'class': 'table table-condensed table-hover table-bordered'}
@@ -48,7 +48,7 @@ class IntervalTable(tables.Table):
 
 
 class HourlyTable(tables.Table):
-    flowrate = tables.Column("Flowrate (Barrels)", accessor="flowrate_in_barrels")
+    flowrate = tables.Column("Flowrate (bbl/d)", accessor="flowrate_in_barrels")
     class Meta:
         model = Hourly
         attrs = {'class': 'table table-condensed table-hover table-bordered'}
@@ -59,7 +59,7 @@ class HourlyTable(tables.Table):
 
 
 class DailyTable(tables.Table):
-    flowrate = tables.Column("Flowrate (Barrels)", accessor="flowrate_in_barrels")
+    flowrate = tables.Column("Flowrate (bbl/d)", accessor="flowrate_in_barrels")
 
     class Meta:
         model = Daily
