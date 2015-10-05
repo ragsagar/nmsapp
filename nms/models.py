@@ -262,6 +262,9 @@ class Daily(models.Model):
     field16 = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
 
+    def flowrate_in_barrels(self):
+        return self.flowrate / 5.614583
+
 
 class Hourly(models.Model):
     nmsrealtime = models.DateTimeField(verbose_name='Real Time')
@@ -291,6 +294,8 @@ class Hourly(models.Model):
     field16 = models.FloatField()
     created = models.DateTimeField(auto_now_add=True) # this will be autopopulated with current machine time
     
+    def flowrate_in_barrels(self):
+        return self.flowrate / 5.614583
 
 
 class Reading(models.Model):
@@ -309,6 +314,9 @@ class Reading(models.Model):
     realtime = models.FloatField()
     batteryvoltage = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
+
+    def flowrate_in_barrels(self):
+        return self.flowrate / 5.614583
     
 
 class Log(models.Model):
